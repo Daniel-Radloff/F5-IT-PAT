@@ -1,0 +1,49 @@
+object Form1: TForm1
+  Left = 763
+  Height = 381
+  Top = 284
+  Width = 313
+  Caption = 'Form1'
+  ClientHeight = 381
+  ClientWidth = 313
+  DesignTimePPI = 94
+  LCLVersion = '2.0.6.0'
+  object FilterComboBox1: TFilterComboBox
+    Left = 48
+    Height = 27
+    Top = 112
+    Width = 226
+    PopupMenu = PopupMenu1
+    TabOrder = 0
+  end
+  object ComboBoxEx1: TComboBoxEx
+    Left = 81
+    Height = 29
+    Top = 198
+    Width = 98
+    ItemHeight = 0
+    ItemsEx = <>
+    TabOrder = 1
+  end
+  object CheckComboBox1: TCheckComboBox
+    Left = 96
+    Height = 29
+    Top = 64
+    Width = 98
+    ItemHeight = 0
+    TabOrder = 2
+  end
+  object TIComboBox1: TTIComboBox
+    Left = 40
+    Height = 27
+    Top = 152
+    Width = 192
+    HistoryCaseSensitive = False
+    MaxHistoryCount = 0
+    TabOrder = 3
+  end
+  object PopupMenu1: TPopupMenu
+    left = 8
+    top = 8
+  end
+end

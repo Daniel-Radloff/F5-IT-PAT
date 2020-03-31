@@ -1,0 +1,55 @@
+object Form1: TForm1
+  Left = 763
+  Height = 381
+  Top = 284
+  Width = 313
+  Caption = 'Form1'
+  ClientHeight = 381
+  ClientWidth = 313
+  DesignTimePPI = 94
+  LCLVersion = '2.0.6.0'
+  object Panel1: TPanel
+    Left = 24
+    Height = 136
+    Top = 200
+    Width = 272
+    Caption = 'Panel1'
+    ClientHeight = 136
+    ClientWidth = 272
+    TabOrder = 0
+    object ComboBox1: TComboBox
+      Left = 8
+      Height = 27
+      Top = 57
+      Width = 116
+      ItemHeight = 0
+      TabOrder = 0
+      Text = 'ComboBox1'
+    end
+    object ComboBox2: TComboBox
+      Left = 148
+      Height = 27
+      Top = 57
+      Width = 116
+      ItemHeight = 0
+      TabOrder = 1
+      Text = 'ComboBox2'
+    end
+    object Edit1: TEdit
+      Left = 15
+      Height = 27
+      Top = 24
+      Width = 102
+      TabOrder = 2
+      Text = 'Edit1'
+    end
+    object Edit2: TEdit
+      Left = 155
+      Height = 27
+      Top = 24
+      Width = 102
+      TabOrder = 3
+      Text = 'Edit2'
+    end
+  end
+end
