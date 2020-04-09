@@ -1,0 +1,38 @@
+object DataModule1: TDataModule1
+  OldCreateOrder = False
+  Height = 147
+  HorizontalOffset = 277
+  VerticalOffset = 245
+  Width = 147
+  PPI = 94
+  object SQLite3Connection1: TSQLite3Connection
+    Connected = True
+    LoginPrompt = False
+    DatabaseName = '/home/daniel/Documents/School_work/Form 5 IT PAT PROGRAM/PAT_5'
+    KeepConnection = False
+    Transaction = SQLTransaction1
+    left = 71
+    top = 46
+  end
+  object SQLTransaction1: TSQLTransaction
+    Active = True
+    Database = SQLite3Connection1
+    left = 8
+    top = 94
+  end
+  object SQLQuery1: TSQLQuery
+    FieldDefs = <>
+    Database = SQLite3Connection1
+    Transaction = SQLTransaction1
+    SQL.Strings = (
+      'SELECT * FROM RoutesTBL;'
+    )
+    Params = <>
+    left = 18
+    top = 28
+  end
+  object DataSource1: TDataSource
+    DataSet = SQLQuery1
+    left = 78
+  end
+end

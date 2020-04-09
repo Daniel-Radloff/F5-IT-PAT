@@ -4,52 +4,166 @@ object Form1: TForm1
   Top = 284
   Width = 313
   Caption = 'Form1'
+  ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+  ChildSizing.EnlargeVertical = crsHomogenousChildResize
+  ChildSizing.ShrinkHorizontal = crsHomogenousChildResize
+  ChildSizing.ShrinkVertical = crsHomogenousChildResize
   ClientHeight = 381
   ClientWidth = 313
   DesignTimePPI = 94
   LCLVersion = '2.0.6.0'
-  object Panel1: TPanel
-    Left = 24
-    Height = 136
-    Top = 200
+  object pnlLocationSelect: TPanel
+    Left = 20
+    Height = 76
+    Top = 176
     Width = 272
-    Caption = 'Panel1'
-    ClientHeight = 136
+    ClientHeight = 76
     ClientWidth = 272
     TabOrder = 0
-    object ComboBox1: TComboBox
+    object cmbStart: TComboBox
       Left = 8
       Height = 27
-      Top = 57
+      Top = 41
       Width = 116
       ItemHeight = 0
       TabOrder = 0
-      Text = 'ComboBox1'
+      Text = 'cmbStart'
     end
-    object ComboBox2: TComboBox
+    object cmbFinnal: TComboBox
       Left = 148
       Height = 27
-      Top = 57
+      Top = 41
       Width = 116
       ItemHeight = 0
       TabOrder = 1
-      Text = 'ComboBox2'
+      Text = 'cmbFinnal'
     end
-    object Edit1: TEdit
+    object edtFilterStart: TEdit
       Left = 15
       Height = 27
-      Top = 24
+      Top = 8
       Width = 102
       TabOrder = 2
-      Text = 'Edit1'
+      Text = 'Filter Start'
     end
-    object Edit2: TEdit
+    object edtFilterFinal: TEdit
       Left = 155
       Height = 27
-      Top = 24
+      Top = 8
       Width = 102
       TabOrder = 3
-      Text = 'Edit2'
+      Text = 'Filter End'
+    end
+  end
+  object pnlTimeSelect: TPanel
+    Left = 20
+    Height = 44
+    Top = 264
+    Width = 272
+    ClientHeight = 44
+    ClientWidth = 272
+    TabOrder = 1
+    object tedtStart: TTimeEdit
+      Left = 16
+      Height = 27
+      Hint = 'Click the Clock icon to select a time.'
+      Top = 8
+      Width = 101
+      ButtonWidth = 23
+      NumGlyphs = 1
+      MaxLength = 0
+      TabOrder = 0
+      Text = 'tedtStart'
+    end
+    object tedtEnd: TTimeEdit
+      Left = 156
+      Height = 27
+      Top = 8
+      Width = 101
+      ButtonWidth = 23
+      NumGlyphs = 1
+      MaxLength = 0
+      TabOrder = 1
+      Text = 'tedtEnd'
+    end
+  end
+  object btnExit_Select: TButton
+    Left = 24
+    Height = 49
+    Top = 320
+    Width = 105
+    Caption = 'Exit'
+    TabOrder = 2
+  end
+  object btnNext_Select: TButton
+    Left = 184
+    Height = 49
+    Top = 320
+    Width = 105
+    Caption = 'btnNext_Select'
+    TabOrder = 3
+  end
+  object btnReset_Select: TButton
+    Left = 137
+    Height = 32
+    Top = 328
+    Width = 41
+    Caption = 'Reset'
+    TabOrder = 4
+  end
+  object gbxWelcome: TGroupBox
+    Left = 20
+    Height = 151
+    Top = 10
+    Width = 272
+    ClientHeight = 149
+    ClientWidth = 270
+    TabOrder = 5
+    object StaticText1: TStaticText
+      Left = 94
+      Height = 23
+      Top = 8
+      Width = 82
+      BorderStyle = sbsSingle
+      Caption = 'Easy Travel'
+      Font.Height = -17
+      Font.Name = 'Sans'
+      ParentFont = False
+      TabOrder = 0
+    end
+    object memWelcome: TMemo
+      Left = 7
+      Height = 104
+      Top = 40
+      Width = 129
+      Lines.Strings = (
+        'memWelcome'
+      )
+      TabOrder = 1
+    end
+    object btnHelp: TButton
+      Left = 154
+      Height = 25
+      Top = 47
+      Width = 102
+      Caption = 'Help'
+      TabOrder = 2
+    end
+    object btnShowHints: TButton
+      Left = 154
+      Height = 25
+      Top = 80
+      Width = 102
+      Caption = 'Show Hints'
+      TabOrder = 3
+    end
+    object btnOther: TButton
+      Left = 154
+      Height = 24
+      Top = 112
+      Width = 102
+      Caption = 'Other'
+      TabOrder = 4
     end
   end
 end

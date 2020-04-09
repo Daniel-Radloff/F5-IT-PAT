@@ -4,46 +4,166 @@ object Form1: TForm1
   Top = 284
   Width = 313
   Caption = 'Form1'
+  ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+  ChildSizing.EnlargeVertical = crsHomogenousChildResize
+  ChildSizing.ShrinkHorizontal = crsHomogenousChildResize
+  ChildSizing.ShrinkVertical = crsHomogenousChildResize
   ClientHeight = 381
   ClientWidth = 313
   DesignTimePPI = 94
   LCLVersion = '2.0.6.0'
-  object FilterComboBox1: TFilterComboBox
-    Left = 48
-    Height = 27
-    Top = 112
-    Width = 226
-    PopupMenu = PopupMenu1
+  object pnlLocationSelect: TPanel
+    Left = 20
+    Height = 76
+    Top = 176
+    Width = 272
+    ClientHeight = 76
+    ClientWidth = 272
     TabOrder = 0
+    object cmbStart: TComboBox
+      Left = 8
+      Height = 27
+      Top = 41
+      Width = 116
+      ItemHeight = 0
+      TabOrder = 0
+      Text = 'cmbStart'
+    end
+    object cmbFinnal: TComboBox
+      Left = 148
+      Height = 27
+      Top = 41
+      Width = 116
+      ItemHeight = 0
+      TabOrder = 1
+      Text = 'cmbFinnal'
+    end
+    object edtFilterStart: TEdit
+      Left = 15
+      Height = 27
+      Top = 8
+      Width = 102
+      TabOrder = 2
+      Text = 'Filter Start'
+    end
+    object edtFilterFinal: TEdit
+      Left = 155
+      Height = 27
+      Top = 8
+      Width = 102
+      TabOrder = 3
+      Text = 'Filter End'
+    end
   end
-  object ComboBoxEx1: TComboBoxEx
-    Left = 81
-    Height = 29
-    Top = 198
-    Width = 98
-    ItemHeight = 0
-    ItemsEx = <>
+  object pnlTimeSelect: TPanel
+    Left = 20
+    Height = 44
+    Top = 264
+    Width = 272
+    ClientHeight = 44
+    ClientWidth = 272
     TabOrder = 1
+    object tedtStart: TTimeEdit
+      Left = 16
+      Height = 27
+      Hint = 'Click the Clock icon to select a time.'
+      Top = 8
+      Width = 101
+      ButtonWidth = 23
+      NumGlyphs = 1
+      MaxLength = 0
+      TabOrder = 0
+      Text = 'tedtStart'
+    end
+    object tedtEnd: TTimeEdit
+      Left = 156
+      Height = 27
+      Top = 8
+      Width = 101
+      ButtonWidth = 23
+      NumGlyphs = 1
+      MaxLength = 0
+      TabOrder = 1
+      Text = 'tedtEnd'
+    end
   end
-  object CheckComboBox1: TCheckComboBox
-    Left = 96
-    Height = 29
-    Top = 64
-    Width = 98
-    ItemHeight = 0
+  object btnExit_Select: TButton
+    Left = 24
+    Height = 49
+    Top = 320
+    Width = 105
+    Caption = 'Exit'
     TabOrder = 2
   end
-  object TIComboBox1: TTIComboBox
-    Left = 40
-    Height = 27
-    Top = 152
-    Width = 192
-    HistoryCaseSensitive = False
-    MaxHistoryCount = 0
+  object btnNext_Select: TButton
+    Left = 184
+    Height = 49
+    Top = 320
+    Width = 105
+    Caption = 'btnNext_Select'
     TabOrder = 3
   end
-  object PopupMenu1: TPopupMenu
-    left = 8
-    top = 8
+  object btnReset_Select: TButton
+    Left = 137
+    Height = 32
+    Top = 328
+    Width = 41
+    Caption = 'Reset'
+    TabOrder = 4
+  end
+  object gbxWelcome: TGroupBox
+    Left = 20
+    Height = 151
+    Top = 10
+    Width = 272
+    ClientHeight = 149
+    ClientWidth = 270
+    TabOrder = 5
+    object StaticText1: TStaticText
+      Left = 94
+      Height = 23
+      Top = 8
+      Width = 82
+      BorderStyle = sbsSingle
+      Caption = 'Easy Travel'
+      Font.Height = -17
+      Font.Name = 'Sans'
+      ParentFont = False
+      TabOrder = 0
+    end
+    object memWelcome: TMemo
+      Left = 7
+      Height = 104
+      Top = 40
+      Width = 129
+      Lines.Strings = (
+        'memWelcome'
+      )
+      TabOrder = 1
+    end
+    object btnHelp: TButton
+      Left = 154
+      Height = 25
+      Top = 47
+      Width = 102
+      Caption = 'Help'
+      TabOrder = 2
+    end
+    object btnShowHints: TButton
+      Left = 154
+      Height = 25
+      Top = 80
+      Width = 102
+      Caption = 'Show Hints'
+      TabOrder = 3
+    end
+    object btnOther: TButton
+      Left = 154
+      Height = 24
+      Top = 112
+      Width = 102
+      Caption = 'Other'
+      TabOrder = 4
+    end
   end
 end

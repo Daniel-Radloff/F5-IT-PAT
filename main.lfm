@@ -1,0 +1,191 @@
+object Form1: TForm1
+  Left = 763
+  Height = 381
+  Top = 284
+  Width = 313
+  Caption = 'Form1'
+  ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+  ChildSizing.EnlargeVertical = crsHomogenousChildResize
+  ChildSizing.ShrinkHorizontal = crsHomogenousChildResize
+  ChildSizing.ShrinkVertical = crsHomogenousChildResize
+  ClientHeight = 381
+  ClientWidth = 313
+  DesignTimePPI = 94
+  LCLVersion = '2.0.6.0'
+  object pnlLocationSelect: TPanel
+    Left = 20
+    Height = 76
+    Top = 176
+    Width = 272
+    ClientHeight = 76
+    ClientWidth = 272
+    TabOrder = 0
+    object cmbStart: TComboBox
+      Left = 8
+      Height = 27
+      Top = 41
+      Width = 116
+      ItemHeight = 0
+      ItemIndex = 0
+      Items.Strings = (
+        'Eg.'
+      )
+      TabOrder = 0
+      Text = 'Eg.'
+    end
+    object cmbFinnal: TComboBox
+      Left = 148
+      Height = 27
+      Top = 41
+      Width = 116
+      ItemHeight = 0
+      ItemIndex = 0
+      Items.Strings = (
+        'Eg.'
+      )
+      TabOrder = 1
+      Text = 'Eg.'
+    end
+    object edtFilterStart: TEdit
+      Left = 15
+      Height = 27
+      Hint = 'Enter a destination or the first few letters and select'#10'a option in the dropdown menu below.'#10'We''ll try guess what you''re looking for.'
+      Top = 8
+      Width = 102
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 2
+      Text = 'Enter Start'
+    end
+    object edtFilterFinal: TEdit
+      Left = 155
+      Height = 27
+      Top = 8
+      Width = 102
+      TabOrder = 3
+      Text = 'Enter End'
+    end
+  end
+  object pnlTimeSelect: TPanel
+    Left = 20
+    Height = 44
+    Top = 264
+    Width = 272
+    ClientHeight = 44
+    ClientWidth = 272
+    TabOrder = 1
+    object tedtStart: TTimeEdit
+      Left = 16
+      Height = 27
+      Hint = 'Click the Clock icon to select a time.'
+      Top = 8
+      Width = 104
+      ButtonWidth = 23
+      NumGlyphs = 1
+      FocusOnButtonClick = True
+      MaxLength = 0
+      TabOrder = 0
+      Text = 'Click Clock'
+    end
+    object tedtEnd: TTimeEdit
+      Left = 152
+      Height = 27
+      Top = 8
+      Width = 105
+      ButtonWidth = 23
+      DirectInput = False
+      NumGlyphs = 1
+      MaxLength = 0
+      TabOrder = 1
+      Text = 'Click Clock'
+    end
+  end
+  object btnExit_Select: TButton
+    Left = 24
+    Height = 49
+    Top = 320
+    Width = 105
+    Caption = 'Exit'
+    TabOrder = 2
+  end
+  object btnNext_Select: TButton
+    Left = 184
+    Height = 49
+    Top = 320
+    Width = 105
+    Caption = 'Next'
+    TabOrder = 3
+  end
+  object btnReset_Select: TButton
+    Left = 137
+    Height = 32
+    Top = 328
+    Width = 41
+    Caption = 'Reset'
+    TabOrder = 4
+  end
+  object gbxWelcome: TGroupBox
+    Left = 20
+    Height = 151
+    Top = 10
+    Width = 272
+    ClientHeight = 149
+    ClientWidth = 270
+    TabOrder = 5
+    object StaticText1: TStaticText
+      Left = 94
+      Height = 23
+      Top = 8
+      Width = 82
+      BorderStyle = sbsSingle
+      Caption = 'Easy Travel'
+      Font.Height = -17
+      Font.Name = 'Sans'
+      ParentFont = False
+      TabOrder = 0
+    end
+    object memWelcome: TMemo
+      Left = 7
+      Height = 104
+      Top = 40
+      Width = 129
+      Font.Height = -10
+      Font.Name = 'Sans'
+      Lines.Strings = (
+        'Welcome to Easy Travel'
+        ''
+        'If you are stuck please use the "Hint" and "Help" button''s located on each stage of the program.'
+        'We hope your experience is a memorable one.'
+        ''
+        'The Developer'
+      )
+      ParentFont = False
+      ScrollBars = ssAutoVertical
+      TabOrder = 1
+    end
+    object btnHelp: TButton
+      Left = 154
+      Height = 25
+      Top = 47
+      Width = 102
+      Caption = 'Help'
+      TabOrder = 2
+    end
+    object btnShowHints: TButton
+      Left = 154
+      Height = 25
+      Top = 80
+      Width = 102
+      Caption = 'Show Hints'
+      TabOrder = 3
+    end
+    object btnOther: TButton
+      Left = 154
+      Height = 24
+      Top = 112
+      Width = 102
+      Caption = 'Other'
+      TabOrder = 4
+    end
+  end
+end
