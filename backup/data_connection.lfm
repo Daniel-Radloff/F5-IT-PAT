@@ -1,38 +1,38 @@
-object DataModule1: TDataModule1
+object DataBase: TDataBase
   OldCreateOrder = False
-  Height = 150
-  HorizontalOffset = 283
-  VerticalOffset = 250
-  Width = 150
-  PPI = 96
+  Height = 147
+  HorizontalOffset = 787
+  VerticalOffset = 245
+  Width = 147
+  PPI = 94
   object SQLite3Connection1: TSQLite3Connection
     Connected = True
     LoginPrompt = False
     DatabaseName = '/home/daniel/Documents/School_work/Form 5 IT PAT PROGRAM/PAT_5'
     KeepConnection = False
     Transaction = SQLTransaction1
-    left = 72
-    top = 47
+    left = 71
+    top = 46
   end
   object SQLTransaction1: TSQLTransaction
     Active = True
     Database = SQLite3Connection1
     left = 8
-    top = 96
+    top = 94
   end
-  object SQLQuery1: TSQLQuery
+  object SQLQuery: TSQLQuery
     FieldDefs = <>
     Database = SQLite3Connection1
     Transaction = SQLTransaction1
     SQL.Strings = (
-      ''
+      'SELECT * FROM BusStopTBL;'
     )
     Params = <>
     left = 18
-    top = 29
+    top = 28
   end
   object DataSource1: TDataSource
-    DataSet = SQLQuery1
-    left = 80
+    DataSet = SQLQuery
+    left = 78
   end
 end

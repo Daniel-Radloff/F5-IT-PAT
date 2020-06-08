@@ -140,7 +140,7 @@ implementation
 constructor BusRoute.Create(Name: String; timeStart: String; timeEnd: String;
   ID: String; price: real;MasterStopList: pStopArray);
 var
-  Stop: String;
+  Stop: initInfoRouteStop;
   StopInfos: array of initInfoRouteStop;
 begin
   self.sName := Name;
@@ -149,6 +149,8 @@ begin
   self.sID := ID;
   self.rPrice := price;
   // Data base code place holder2
+  // Connect to data base and get info on route stops for this route.
+  //         Place that into a array of initInfoRouteStop's and
   for Stop in StopInfos do
   begin
     SetLength(self.arrRouteStops, length(self.arrRouteStops) + 1);
@@ -165,11 +167,11 @@ constructor RouteStop.Create(pToArrStops: pStopArray; info: initInfoRouteStop);
 var
   stop : BusStop;
 begin
-  iInterval := initInfoRouteStop.interval;
+  iInterval := info.interval;
   for stop in pToArrStops^ do
-     if stop.GetID = initInfoRouteStop.ID then break;
+     if stop.GetID = info.ID then break;
   Self.linkedStop := @stop;
-  Self.routePOS := initInfoRouteStop.pos;
+  Self.routePOS := info.pos;
 end;
 
 function RouteStop.isStop(stop:pBusStop): boolean;
