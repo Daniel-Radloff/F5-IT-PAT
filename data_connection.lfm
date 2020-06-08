@@ -1,7 +1,7 @@
-object DataModule1: TDataModule1
+object DataBase: TDataBase
   OldCreateOrder = False
   Height = 147
-  HorizontalOffset = 277
+  HorizontalOffset = 787
   VerticalOffset = 245
   Width = 147
   PPI = 94
@@ -20,19 +20,19 @@ object DataModule1: TDataModule1
     left = 8
     top = 94
   end
-  object SQLQuery1: TSQLQuery
+  object SQLQuery: TSQLQuery
     FieldDefs = <>
     Database = SQLite3Connection1
     Transaction = SQLTransaction1
     SQL.Strings = (
-      'SELECT * FROM RoutesTBL;'
+      ''
     )
     Params = <>
     left = 18
     top = 28
   end
   object DataSource1: TDataSource
-    DataSet = SQLQuery1
+    DataSet = SQLQuery
     left = 78
   end
 end

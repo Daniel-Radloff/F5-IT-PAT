@@ -11,7 +11,8 @@ object Form1: TForm1
   ClientHeight = 381
   ClientWidth = 313
   DesignTimePPI = 94
-  LCLVersion = '2.0.6.0'
+  OnActivate = FormActivate
+  LCLVersion = '2.0.8.0'
   object pnlLocationSelect: TPanel
     Left = 20
     Height = 76
@@ -79,25 +80,25 @@ object Form1: TForm1
       Height = 27
       Hint = 'Click the Clock icon to select a time.'
       Top = 8
-      Width = 101
+      Width = 104
       ButtonWidth = 23
       NumGlyphs = 1
       FocusOnButtonClick = True
       MaxLength = 0
       TabOrder = 0
-      Text = '00:00'
+      Text = 'Click Clock'
     end
     object tedtEnd: TTimeEdit
-      Left = 156
+      Left = 152
       Height = 27
       Top = 8
-      Width = 101
+      Width = 105
       ButtonWidth = 23
       DirectInput = False
       NumGlyphs = 1
       MaxLength = 0
       TabOrder = 1
-      Text = '00:00'
+      Text = 'Click Clock'
     end
   end
   object btnExit_Select: TButton

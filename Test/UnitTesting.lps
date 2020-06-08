@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectSession>
+    <Version Value="11"/>
+    <BuildModes Active="Default"/>
+    <Units Count="3">
+      <Unit0>
+        <Filename Value="UnitTesting.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos Y="24"/>
+        <UsageCount Value="45"/>
+      </Unit0>
+      <Unit1>
+        <Filename Value="test.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="70" Y="21"/>
+        <UsageCount Value="45"/>
+      </Unit1>
+      <Unit2>
+        <Filename Value="../custom_classes.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Custom_Classes"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="125"/>
+        <CursorPos X="177" Y="142"/>
+        <FoldState Value=" T7i3CV T3l2041 pjEjP035C"/>
+        <UsageCount Value="45"/>
+      </Unit2>
+    </Units>
+    <JumpHistory HistoryIndex="-1"/>
+    <RunParams>
+      <FormatVersion Value="2"/>
+      <Modes Count="1" ActiveMode="default">
+        <Mode0 Name="default">
+          <local>
+            <CommandLineParams Value="--format=plain -a -p"/>
+          </local>
+        </Mode0>
+      </Modes>
+    </RunParams>
+  </ProjectSession>
+</CONFIG>

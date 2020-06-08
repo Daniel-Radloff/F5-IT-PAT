@@ -9,25 +9,33 @@ uses
 
 type
 
-  { TDataModule1 }
+  { TDataBase }
 
-  TDataModule1 = class(TDataModule)
-    DataSource1: TDataSource;
-    SQLite3Connection1: TSQLite3Connection;
-    SQLQuery1: TSQLQuery;
-    SQLTransaction1: TSQLTransaction;
+  TDataBase = class(TDataModule)
+    Source: TDataSource;
+    SQLite3Connection: TSQLite3Connection;
+    SQLQuery: TSQLQuery;
+    SQLTransaction: TSQLTransaction;
   private
 
   public
-
+    function GetAllStops():int16;
   end;
 
 var
-  DataModule1: TDataModule1;
+  DataBase: TDataBase;
 
 implementation
 
 {$R *.lfm}
+
+{ TDataBase }
+
+function TDataBase.GetAllStops(): int16;
+begin
+  SQLQuery.SQL.Text := 'Select * from BusStopTBL';
+  SQLQuery.Open;
+end;
 
 end.
 

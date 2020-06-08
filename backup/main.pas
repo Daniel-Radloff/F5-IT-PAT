@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, FileCtrl, Menus,
-  ComboEx, StdCtrls, ExtCtrls, EditBtn, Buttons, RTTICtrls;
+  ComboEx, StdCtrls, ExtCtrls, EditBtn, Buttons, RTTICtrls, Engine;
 
 type
 
@@ -30,6 +30,7 @@ type
     StaticText1: TStaticText;
     tedtStart: TTimeEdit;
     tedtEnd: TTimeEdit;
+    procedure FormActivate(Sender: TObject);
   private
 
   public
@@ -42,6 +43,13 @@ var
 implementation
 
 {$R *.lfm}
+
+{ TForm1 }
+
+procedure TForm1.FormActivate(Sender: TObject);
+begin
+  Engine.Main.Create()
+end;
 
 end.
 

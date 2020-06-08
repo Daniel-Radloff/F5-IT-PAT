@@ -36,7 +36,7 @@
         <PackageName Value="LCL"/>
       </Item3>
     </RequiredPackages>
-    <Units Count="7">
+    <Units Count="9">
       <Unit0>
         <Filename Value="project1.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -68,7 +68,7 @@
       <Unit4>
         <Filename Value="data_connection.pas"/>
         <IsPartOfProject Value="True"/>
-        <ComponentName Value="DataModule1"/>
+        <ComponentName Value="DataBase"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="DataModule"/>
         <UnitName Value="Data_Connection"/>
@@ -89,6 +89,16 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="Admin_edit_add_stop"/>
       </Unit6>
+      <Unit7>
+        <Filename Value="custom_classes.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Custom_Classes"/>
+      </Unit7>
+      <Unit8>
+        <Filename Value="engine.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Engine"/>
+      </Unit8>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
