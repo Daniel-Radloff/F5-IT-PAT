@@ -48,7 +48,7 @@ implementation
 
 procedure TForm1.FormActivate(Sender: TObject);
 begin
-  Engine.Main.Create()
+
 end;
 
 end.
