@@ -25,7 +25,7 @@ object DataBase: TDataBase
     Database = SQLite3Connection1
     Transaction = SQLTransaction1
     SQL.Strings = (
-      'SELECT * FROM BusStopTBL;'
+      ''
     )
     Params = <>
     left = 18
