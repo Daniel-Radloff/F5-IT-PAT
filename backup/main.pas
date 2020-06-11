@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, FileCtrl, Menus,
-  ComboEx, StdCtrls, ExtCtrls, EditBtn, Buttons, RTTICtrls, Engine;
+  ComboEx, StdCtrls, ExtCtrls, EditBtn, Buttons, RTTICtrls, Engine,
+  Custom_Classes;
 
 type
 
@@ -47,8 +48,11 @@ implementation
 { TForm1 }
 
 procedure TForm1.FormActivate(Sender: TObject);
+var
+		  x: pStopArray;
 begin
-
+  x := Engine.MainEngine.GiveStopsArr();
+  y := x^[1];
 end;
 
 end.

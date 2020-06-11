@@ -12,10 +12,11 @@ type
   { TDataBase }
 
   TDataBase = class(TDataModule)
-    Source: TDataSource;
-    SQLite3Connection: TSQLite3Connection;
-    SQLQuery: TSQLQuery;
-    SQLTransaction: TSQLTransaction;
+    DataSource1: TDataSource;
+    SQLite3Connection1: TSQLite3Connection;
+    SQLQuery1: TSQLQuery;
+    SQLTransaction1: TSQLTransaction;
+	procedure DataModuleCreate(Sender: TObject);
   private
 
   public
@@ -31,10 +32,15 @@ implementation
 
 { TDataBase }
 
+procedure TDataBase.DataModuleCreate(Sender: TObject);
+begin
+  SQLite3Connection1.DatabaseName := 'PAT_5';
+end;
+
 function TDataBase.GetAllStops(): int16;
 begin
-  SQLQuery.SQL.Text := 'Select * from BusStopTBL';
-  SQLQuery.Open;
+  SQLQuery1.SQL.Text := 'Select * from BusStopTBL';
+  SQLQuery1.Open;
 end;
 
 end.

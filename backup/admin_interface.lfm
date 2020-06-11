@@ -1,50 +1,53 @@
 object Form3: TForm3
-  Left = 519
-  Height = 413
-  Top = 282
-  Width = 819
+  Left = 517
+  Height = 422
+  Top = 280
+  Width = 836
   Caption = 'Form3'
-  ClientHeight = 413
-  ClientWidth = 819
-  DesignTimePPI = 94
+  ClientHeight = 422
+  ClientWidth = 836
   LCLVersion = '2.0.6.0'
   object GroupBox1: TGroupBox
     Left = 16
-    Height = 384
+    Height = 392
     Top = 16
-    Width = 208
-    ClientHeight = 382
-    ClientWidth = 206
+    Width = 212
+    ClientHeight = 390
+    ClientWidth = 210
+    ParentFont = False
     TabOrder = 0
     object btnAdd: TButton
       Left = 8
-      Height = 56
-      Top = 216
-      Width = 186
+      Height = 57
+      Top = 221
+      Width = 190
       Caption = 'Add New Route'
+      ParentFont = False
       TabOrder = 0
     end
     object btnDelete: TButton
-      Left = 24
-      Height = 32
-      Top = 280
-      Width = 152
+      Left = 25
+      Height = 33
+      Top = 286
+      Width = 155
       Caption = 'Delete Route'
+      ParentFont = False
       TabOrder = 1
     end
     object btnModify: TButton
       Left = 8
-      Height = 56
-      Top = 320
-      Width = 186
+      Height = 57
+      Top = 327
+      Width = 190
       Caption = 'Modify Route'
+      ParentFont = False
       TabOrder = 2
     end
     object Memo2: TMemo
       Left = 8
-      Height = 120
+      Height = 123
       Top = 8
-      Width = 186
+      Width = 190
       Lines.Strings = (
         'WARNING!!!:'
         'This section of the program modifys the data base and gives you the potential to destory existing routes, please use with causion.'
@@ -53,134 +56,152 @@ object Form3: TForm3
         ''
         'If you need help please use the help buttons.'
       )
+      ParentFont = False
       ScrollBars = ssAutoVertical
       TabOrder = 3
     end
     object pnlHelp: TPanel
       Left = 10
-      Height = 73
-      Top = 136
-      Width = 182
-      ClientHeight = 73
-      ClientWidth = 182
+      Height = 75
+      Top = 139
+      Width = 186
+      ClientHeight = 75
+      ClientWidth = 186
+      ParentFont = False
       TabOrder = 4
       object btnHints: TButton
         Left = 8
-        Height = 56
+        Height = 57
         Top = 8
-        Width = 73
+        Width = 75
         Caption = 'Show Hints'
+        ParentFont = False
         TabOrder = 0
       end
       object btnHelp: TButton
-        Left = 96
-        Height = 56
+        Left = 98
+        Height = 57
         Top = 8
-        Width = 73
+        Width = 75
         Caption = 'Help'
+        ParentFont = False
         TabOrder = 1
       end
     end
   end
   object GroupBox2: TGroupBox
-    Left = 232
-    Height = 372
+    Left = 237
+    Height = 380
     Top = 20
-    Width = 408
-    ClientHeight = 370
-    ClientWidth = 406
+    Width = 417
+    ClientHeight = 378
+    ClientWidth = 415
+    ParentFont = False
     TabOrder = 1
     object DBGrid1: TDBGrid
       Left = 8
-      Height = 312
-      Top = 48
-      Width = 392
+      Height = 319
+      Top = 49
+      Width = 400
       Color = clWindow
       Columns = <>
+      DataSource = DataBase.DataSource1
+      ParentFont = False
       TabOrder = 0
     end
     object lblFilter: TLabel
-      Left = 48
+      Left = 49
       Height = 14
       Top = 18
-      Width = 31
+      Width = 32
       Caption = 'Filter:'
       ParentColor = False
+      ParentFont = False
     end
     object edtFilter: TEdit
-      Left = 88
-      Height = 27
+      Left = 90
+      Height = 35
       Top = 13
-      Width = 192
+      Width = 196
+      ParentFont = False
       TabOrder = 1
-      Text = 'edtFilter'
+      Text = 'Filter data'
     end
     object btnSearch: TButton
-      Left = 296
-      Height = 25
+      Left = 302
+      Height = 26
       Top = 14
-      Width = 96
+      Width = 98
       Caption = 'Search'
+      ParentFont = False
       TabOrder = 2
     end
   end
   object GroupBox3: TGroupBox
-    Left = 648
-    Height = 240
+    Left = 662
+    Height = 245
     Top = 16
-    Width = 160
-    ClientHeight = 238
-    ClientWidth = 158
+    Width = 163
+    ClientHeight = 243
+    ClientWidth = 161
+    ParentFont = False
     TabOrder = 2
     object Memo1: TMemo
       Left = 8
-      Height = 224
+      Height = 229
       Top = 8
-      Width = 143
+      Width = 146
       Lines.Strings = (
-        'Memo1'
+        'List of current transactions:'
       )
+      ParentFont = False
+      ScrollBars = ssAutoVertical
       TabOrder = 0
     end
   end
   object GroupBox4: TGroupBox
-    Left = 648
-    Height = 136
-    Top = 264
-    Width = 160
-    ClientHeight = 134
-    ClientWidth = 158
+    Left = 662
+    Height = 139
+    Top = 270
+    Width = 163
+    ClientHeight = 137
+    ClientWidth = 161
+    ParentFont = False
     TabOrder = 3
     object btnEdit: TButton
       Left = 8
-      Height = 24
+      Height = 25
       Top = 16
-      Width = 143
+      Width = 146
       Caption = 'Remove Change'
+      ParentFont = False
       TabOrder = 0
     end
     object btnReset: TButton
-      Left = 64
-      Height = 24
-      Top = 48
-      Width = 81
+      Left = 65
+      Height = 25
+      Top = 49
+      Width = 83
       Caption = 'Reset'
+      ParentFont = False
       TabOrder = 1
     end
     object btnComit: TButton
       Left = 8
-      Height = 48
-      Top = 80
-      Width = 143
+      Height = 49
+      Top = 82
+      Width = 146
       Caption = 'Comit Changes'
+      ParentFont = False
       TabOrder = 2
     end
     object btnExit: TButton
       Left = 16
-      Height = 24
-      Top = 48
-      Width = 41
+      Height = 25
+      Top = 49
+      Width = 42
       Caption = 'Exit'
+      ParentFont = False
       TabOrder = 3
     end
   end

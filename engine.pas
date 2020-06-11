@@ -14,23 +14,28 @@ type
 
   APEngine = class
   private
-    BusStops: StopArray;
+    BusStops: Custom_Classes.StopArray;
     function GetNewStops(): int16;
   public
     constructor Create(); overload;
     function InitializeProgram(): int16;
+    function StopsToInt():integer;
+    function GiveStopsArr(): Custom_Classes.pStopArray;
 
   end;
 
- var Main : APEngine;
+ var MainEngine: APEngine;
  procedure Init();
 
 implementation
 
 procedure Init();
+var
+		  x: Integer;
 begin
-  Main.Create();
-  Main.InitializeProgram();
+  MainEngine := APEngine.Create();
+  MainEngine.InitializeProgram();
+  x := MainEngine.StopsToInt();
 end;
 
 { Engine }
@@ -43,16 +48,16 @@ begin
   // Populate data source with all BusStops
     GetAllStops();
     setLength(BusStops,0);
-    while not SQLQuery.EOF do
+    while not SQLQuery1.EOF do
     begin
       // Create the new bus Stop
-      NewStop := BusStop.Create(SQLQuery.Fields[3].AsString,
-       SQLQuery.Fields[0].AsString, SQLQuery.Fields[1].AsString);
+      NewStop := BusStop.Create(SQLQuery1.Fields[3].AsString,
+       SQLQuery1.Fields[0].AsString, SQLQuery1.Fields[1].AsString);
        // Increase length of Stops array
        setlength(BusStops,length(BusStops)+1);
        // Add New stop
        BusStops[length(BusStops)-1] := NewStop;
-       SQLQuery.Next();
+       SQLQuery1.Next();
     end;
   end;
 end;
@@ -66,4 +71,15 @@ function APEngine.InitializeProgram(): int16;
 begin
   GetNewStops();
 end;
+
+function APEngine.StopsToInt(): integer;
+begin
+  Result := length(self.BusStops);
+end;
+
+function APEngine.GiveStopsArr(): Custom_Classes.pStopArray;
+begin
+  Result := @self.BusStops;
+end;
+
 end.
