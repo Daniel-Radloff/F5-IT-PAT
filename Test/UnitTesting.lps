@@ -3,7 +3,7 @@
   <ProjectSession>
     <Version Value="11"/>
     <BuildModes Active="Default"/>
-    <Units Count="3">
+    <Units Count="6">
       <Unit0>
         <Filename Value="UnitTesting.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -14,21 +14,49 @@
       <Unit1>
         <Filename Value="test.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
         <CursorPos X="70" Y="21"/>
         <UsageCount Value="45"/>
+        <Loaded Value="True"/>
       </Unit1>
       <Unit2>
         <Filename Value="../custom_classes.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="Custom_Classes"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="-1"/>
+        <EditorIndex Value="2"/>
         <TopLine Value="125"/>
         <CursorPos X="177" Y="142"/>
-        <FoldState Value=" T7i3CV T3l2041 pjEjP035C"/>
         <UsageCount Value="45"/>
+        <Loaded Value="True"/>
       </Unit2>
+      <Unit3>
+        <Filename Value="../engine.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Engine"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="1"/>
+        <UsageCount Value="20"/>
+        <Loaded Value="True"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="../data_connection.pas"/>
+        <IsPartOfProject Value="True"/>
+        <HasResources Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="20"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="../PAT_5"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="20"/>
+        <DefaultSyntaxHighlighter Value="None"/>
+      </Unit5>
     </Units>
     <JumpHistory HistoryIndex="-1"/>
     <RunParams>

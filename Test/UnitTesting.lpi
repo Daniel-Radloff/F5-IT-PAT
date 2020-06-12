@@ -57,7 +57,7 @@
         <PackageName Value="FCL"/>
       </Item1>
     </RequiredPackages>
-    <Units Count="3">
+    <Units Count="6">
       <Unit0>
         <Filename Value="UnitTesting.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -71,6 +71,20 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="Custom_Classes"/>
       </Unit2>
+      <Unit3>
+        <Filename Value="../engine.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Engine"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="../data_connection.pas"/>
+        <IsPartOfProject Value="True"/>
+        <HasResources Value="True"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="../PAT_5"/>
+        <IsPartOfProject Value="True"/>
+      </Unit5>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
