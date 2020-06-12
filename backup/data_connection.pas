@@ -39,7 +39,7 @@ end;
 
 function TDataBase.GetAllStops(): int16;
 begin
-  SQLQuery1.SQL.Text := 'Select * from BusStopTBL';
+  SQLQuery1.SQL.Text := 'Select * from BusStopTBL order by BusStopID';
   SQLQuery1.Open;
 end;
 

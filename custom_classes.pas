@@ -56,8 +56,6 @@ type
       CurrentRoute: parrp; Found: pRouteArrayp);
 
     { Private End }
-  private
-    function GetID: string;
 
   Public
     // Creates the Object and is part of the first stage of program
@@ -65,7 +63,7 @@ type
     Constructor Create(Name:String;ID:String;Location:String);
     // Is Used in second stage of Initialization and is used to populate
     //    The aClose variable of all the BusStops
-    Procedure AddClose(Stop:Pointer);
+    Procedure AddClose(Stop:pBusStop);
     procedure AddClose(Stops: Array of pointer); overload;
     // Is Used in the Route finder Routine and starts the function which
     //    finds all posibble routes from the Stop it is run from to the stop
@@ -73,6 +71,7 @@ type
     //    this was the only way around it that I could think of.
     Function FindRouteInit(FinnalStop:Pointer) : pRouteArray;
     function ToString: ansistring; override;
+    function GetID: string;
     { Public End }
 
   end;
@@ -304,7 +303,7 @@ begin
     end;
   end;
 
-procedure BusStop.AddClose(Stop: Pointer);
+procedure BusStop.AddClose(Stop: pBusStop);
 begin
   // Add new block
   SetLength(aClose, Length(aClose) + 1);

@@ -1,25 +1,25 @@
 object DataBase: TDataBase
   OnCreate = DataModuleCreate
   OldCreateOrder = False
-  Height = 150
-  HorizontalOffset = 804
-  VerticalOffset = 250
-  Width = 150
-  PPI = 96
+  Height = 147
+  HorizontalOffset = 787
+  VerticalOffset = 245
+  Width = 147
+  PPI = 94
   object SQLite3Connection1: TSQLite3Connection
-    Connected = True
+    Connected = False
     LoginPrompt = False
-    DatabaseName = './PAT_5'
+    DatabaseName = '/home/daniel/Documents/Programming/Delphi/F5-IT-PAT/PAT_5'
     KeepConnection = False
     Transaction = SQLTransaction1
-    left = 73
-    top = 47
+    left = 71
+    top = 46
   end
   object SQLTransaction1: TSQLTransaction
-    Active = True
+    Active = False
     Database = SQLite3Connection1
     left = 8
-    top = 96
+    top = 94
   end
   object SQLQuery1: TSQLQuery
     FieldDefs = <>
@@ -30,10 +30,10 @@ object DataBase: TDataBase
     )
     Params = <>
     left = 18
-    top = 29
+    top = 28
   end
   object DataSource1: TDataSource
     DataSet = SQLQuery1
-    left = 80
+    left = 78
   end
 end

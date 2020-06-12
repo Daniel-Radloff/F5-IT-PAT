@@ -20,6 +20,7 @@ type
   private
 
   public
+    // Get all stops and sort them
     function GetAllStops():int16;
   end;
 
@@ -39,7 +40,9 @@ end;
 
 function TDataBase.GetAllStops(): int16;
 begin
-  SQLQuery1.SQL.Text := 'Select * from BusStopTBL';
+  // Order by so the query is sorted for when we read it into arrays so
+  //       The data is preped for a binary search.
+  SQLQuery1.SQL.Text := 'Select * from BusStopTBL order by BusStopID';
   SQLQuery1.Open;
 end;
 
