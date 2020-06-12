@@ -118,6 +118,7 @@ begin
         BusStops[count].AddClose(BinSearchMulti(Self.pBusStops,linked))
       end;
       inc(Count);
+      SQLQuery1.Next();
     end;
   end;
   Result := 0;
