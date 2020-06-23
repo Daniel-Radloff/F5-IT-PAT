@@ -21,6 +21,7 @@ type
     function InitializeProgram(): int16;
     function StopsToInt():integer;
     function GiveStopsArr(): Custom_Classes.pStopArray;
+    function GetRoute(sStart: string; sEnd: string): pRouteArray;
 
   end;
 
@@ -142,6 +143,15 @@ end;
 function APEngine.GiveStopsArr(): Custom_Classes.pStopArray;
 begin
   Result := @self.BusStops;
+end;
+
+function APEngine.GetRoute(sStart: string; sEnd: string): pRouteArray;
+var
+  pbStart, pbEnd: pBusStop;
+begin
+  pbStart := BinSearchMulti(pBusStops,sStart);
+  pbEnd := BinSearchMulti(pBusStops, sEnd);
+  Result := pbStart^.FindRouteInit(pbEnd);
 end;
 
 end.

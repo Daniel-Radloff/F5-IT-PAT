@@ -5,7 +5,7 @@ unit Custom_Classes;
 interface
 
 uses
-  Classes, SysUtils;
+  Classes, SysUtils, contnrs;
 
 type
   initInfoRouteStop = record
@@ -37,6 +37,7 @@ type
   // Pointer Used to manipulate pRouteArray in busStop.FindRoute()
   pRouteArrayp = ^pRouteArray;
 
+  pTFPHashList = ^TFPHashList;
 
   { BusStop }
 //  This is a important class that is also the first class to be inititalized
@@ -53,7 +54,7 @@ type
     // This is the real findRoute function, you will see why it is declared here
     //      in the comments before FindRouteInit's def.
     procedure FindRoute(FinnalStop:Pointer;
-      CurrentRoute: parrp; Found: pRouteArrayp);
+      CurrentRoute: pTFPHashList; Found: pRouteArrayp; Depth: integer);
 
     { Private End }
 
@@ -181,11 +182,13 @@ end;
 
 { BusStop }
 
-procedure BusStop.FindRoute(FinnalStop: Pointer; CurrentRoute: parrp;
-  Found: pRouteArrayp);
+procedure BusStop.FindRoute(FinnalStop: Pointer; CurrentRoute: pTFPHashList;
+  Found: pRouteArrayp; Depth: integer);
 var
   Stop, Been : ^BusStop;
   Back: Boolean;
+  count: Integer;
+  newFound : pArr;
 begin
   // The Way this works is a bit unconventional, instead of modifying variables
   //     inside of the function and returning their results, this modifys
@@ -203,19 +206,23 @@ begin
     if Stop = FinnalStop then
     begin
       // Increase the length of the Current route
-      SetLength(CurrentRoute^ , length(CurrentRoute^)+1);
+      CurrentRoute^.Add(Stop^.GetID,Stop);
       // Append the current stop/ destination to the Current route
-      CurrentRoute^[length(CurrentRoute^)-1] := Stop;
       // Increase the length of the list of possible routes
       SetLength(Found^, length(Found^)+1);
       // Copy the current route and append it to the list of possible routes.
       //      This is to make sure that it does not change as we continue
       //      to manipulate the origial.
-      Found^[length(Found^)-1] := COPY(CurrentRoute^);
+      for count := 0 to CurrentRoute^.Count-1 do
+          begin
+            SetLength(newFound, length(newFound)+1);
+            newFound[Length(newFound)-1] := CurrentRoute^.Items[Count];
+          end;
+      Found^[length(Found^)-1] := newFound;
       // Remove and shorten the current route because if we encounter the
       //        stop again it means that we have found another viable route
       //        and if we dont we end up with corrupted and inacurate data.
-      SetLength(CurrentRoute^, length(CurrentRoute^)-1);
+      CurrentRoute^.Delete(CurrentRoute^.Count-1);
       // Move to the next stop/ goto the start of the loop and cycle to next
       Continue;
     end;
@@ -232,9 +239,9 @@ begin
     Back := False;
     // Another for loop, this just go's through the list doing what I explained
     //         in the previoce comment. The code is pretty self explanitory.
-    for Been in CurrentRoute^ do
-    begin
-      if been = Stop then Back := True;
+    try
+        if CurrentRoute^.Find(Stop^.GetID) = Stop then Back := True;
+    Except
     end;
     if Back = True then Continue;
 
@@ -244,9 +251,7 @@ begin
     //      for no stack overflows.
 
     // Increase the length of the Current route.
-    SetLength(CurrentRoute^, length(CurrentRoute^)+1);
-    // Appent the current new node to the Current Route;
-    CurrentRoute^[length(CurrentRoute^)-1] := Stop;
+    CurrentRoute^.Add(Stop^.GetID,Stop);
     // Use the current stops FindRoute method and parse it the pointers to the
     //     FinnalStop, CurrentRoute, and ViableRoutes. By doing this it can
     //     manipulate the variables without overwriting previoce data and alows
@@ -262,7 +267,8 @@ begin
     //     fine. That is based on python too so we might have more space to work
     //     with.
     try
-      Stop^.FindRoute(FinnalStop, CurrentRoute, Found);
+        inc(Depth);
+      Stop^.FindRoute(FinnalStop, CurrentRoute, Found, Depth);
     Except
       on E : EStackOverflow do
        writeln('Warning, cannot reach any further stops down this path. ' +
@@ -271,7 +277,7 @@ begin
 
     // When it has finnished with the current stop delete it from the Current
     //      route for the same reason as we did when we found our destination.
-    SetLength(CurrentRoute^, length(CurrentRoute^)-1);
+    CurrentRoute^.Delete(CurrentRoute^.Count-1);
     // Cycle thru to the next node in the adjasent stops, to really understand
     //       what is going on here you need to watch it work in action inside
     //       the debugger so I would highly recommend doing that if you want to
@@ -329,12 +335,14 @@ end;
 function BusStop.FindRouteInit(FinnalStop: Pointer): pRouteArray;
 var
   // Used to Check that we are not going where we were.
-  Backwards : pArr;
+  Backwards : TFPHashList;
   // A list of possible routes that is manipuated in the other function.
   Found : pRouteArray;
 begin
+  Backwards := TFPHashList.Create();
+  Backwards.Capacity := 5000;
   //  Backwards and Found are refrenced for future modification.
-  FindRoute(FinnalStop, @Backwards, @Found);
+  FindRoute(FinnalStop, @Backwards, @Found,1);
   //  No need to derefrence as this is orriginal variable
   Result := Found;
 end;
