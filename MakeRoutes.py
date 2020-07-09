@@ -36,8 +36,6 @@ while True:
     else:
         routePosHID = int(POS[0]) + 1
     del(POS)
-
-    curSelect.close()
     while True:
         busStopName = input("Stop (" + str(routePosHID+1) +
                             "); Enter Stop Name: ")
@@ -64,12 +62,14 @@ while True:
             except TypeError:
                 print("Error invalid number, please enter a integer (1,2,3,"
                       "etc.)")
+        curEdit.close()
+        curEdit = conEdit.cursor()
         try:
             curEdit.execute("INSERT INTO RouteStopsTBL (RouteID, RoutePosition"
                             ", BusStopID, Interval) VALUES(?,?,?,?)",
                             (result[0], routePosHID, busStopID, intervali))
+            conEdit.commit()
             routePosHID += 1
             print("Success")
-            conEdit.commit()
         except sqlite3.DatabaseError:
             print("Something when't wrong and we don't know what lol.")
