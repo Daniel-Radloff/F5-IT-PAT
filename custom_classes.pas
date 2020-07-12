@@ -1,6 +1,7 @@
 unit Custom_Classes;
 
 {$mode objfpc}{$H+}
+//{$rangeChecks on}
 
 interface
 
@@ -25,7 +26,6 @@ type
 
   // All these types have to be defined because if they arn't the compliler
   //      has a fit and throws about 237 errors 🙁
-
   // Pointer to busStop
   pBusStop = ^BusStop;
   // Used to make custom arrays of pBusStops
@@ -38,6 +38,18 @@ type
   pRouteArrayp = ^pRouteArray;
 
   pTFPHashList = ^TFPHashList;
+  pRoute = ^BusRoute;
+
+  pBusRoute = ^BusRoute;
+  pBusRouteArr = array of pRoute;
+
+
+  StopRouteLink = record
+    Stop : pBusStop;
+    Route : pBusRoute;
+  end;
+  arrStopRouteLink = array of StopRoutelink;
+  RouteIntesecArr = array of arrStopRouteLink;
 
 
   { BusStop }
@@ -51,29 +63,37 @@ type
     sName : string;
     sID : string;
     sLocation : string;
-    aClose : array of Pointer;
+    aClose : pBusRouteArr;
     // This is the real findRoute function, you will see why it is declared here
     //      in the comments before FindRouteInit's def.
     procedure FindRoute(FinnalStop:Pointer;
       CurrentRoute: pTFPHashList; Found: pRouteArrayp; Depth: integer);
+    // Return connected routes
+  private
+    function GetRoutes():pBusRouteArr;
+
+
 
     { Private End }
 
   Public
+
     // Creates the Object and is part of the first stage of program
     //         initialization
     Constructor Create(Name:String;ID:String;Location:String);
     // Is Used in second stage of Initialization and is used to populate
     //    The aClose variable of all the BusStops
-    Procedure AddClose(Stop:pBusStop);
+    Procedure AddClose(Stop:pBusRoute);
     procedure AddClose(Stops: Array of pointer); overload;
     // Is Used in the Route finder Routine and starts the function which
     //    finds all posibble routes from the Stop it is run from to the stop
     //    specifyed. This is neccicary because of a limitation of delphi and
     //    this was the only way around it that I could think of.
-    Function FindRouteInit(FinnalStop:Pointer) : pRouteArray;
+    Function FindRouteInit(FinnalStop:pBusStop) : pBusRouteArr;
     function ToString: ansistring; override;
     function GetID: string;
+    function GetName:string;
+    function GetLinkedRoutes: string;
     { Public End }
 
   end;
@@ -89,7 +109,9 @@ type
 //         when a bus will arive and depart at a stop in a route.
 
   { RouteStop }
-
+  // ..... look ......
+  // I don't understand parents or higherachie
+  // so leave me alone and stop bullying me XD
   RouteStop = Class
   Strict Private
     // This is a interval used to calculate the times at which the bus will
@@ -104,8 +126,11 @@ type
     routePOS : integer;
 
   Private
-    {%H-}constructor Create(pToArrStops: pStopArray; info : initInfoRouteStop);
+    {%H-}constructor Create(POS:integer; Stop:pBusStop;
+      TimeInterval:integer);
     function isStop(stop: pBusStop): boolean;
+    function GetLinkedRoutes:pBusRouteArr;
+    function GetStop:pBusStop;
 
 
   end;
@@ -128,57 +153,147 @@ type
       // Used to store all the stops for this route.
       arrRouteStops : array of RouteStop;
 
+    private
+      function GetAllLinkedRoutes:pBusRouteArr;
+      function FindStopOnRoute(RoutesToFind: pBusRouteArr): arrStopRouteLink;
+
     public
-      constructor Create(Name: String; timeStart: String; timeEnd: String;
-        ID: String; price: real; MasterStopList: pStopArray);
+      constructor Create(ID: String; timeEnd: String; timeStart: String;
+        price: real;Name: String);
+      function PopulateRoute(Position:integer; linkedStop:pBusStop;
+        iinterval:integer):int16;
+      function GetID:string;
+      function GetHID:string;
 
   end;
-
+   // A array of all routes, used in engine for init,cals and other
+  RouteArray = array of BusRoute;
+  // Is There a common route. Only used in Findroute
+  function IsCommonRoute(Test1:pBusRouteArr; Test2: pBusRouteArr):pBusRouteArr;
+  function IsCommonRoute(Test1:pBusStop; Test2:pBusStop):StopRouteLink;
+  overload;
+  // Revmove dupes Modify is the list of potential dupes, Modifyer is the
+  //                             List to compare and returns appended
+                               //non dupe stops.
+  procedure RemoveDupes(Modify: pBusRouteArr;var Modifer: pBusRouteArr);
+  procedure RemoveDupes(var arr:pBusRouteArr); overload;
+  function RemoveDupes(var arr:arrStopRouteLink):arrStopRouteLink;
+  Function FindDupes(Modify: pBusRouteArr; Modifer: pBusRouteArr): pBusRouteArr;
+  Function FindIntersections(Test1:arrStopRouteLink; Test2:arrStopRouteLink):
+           RouteIntesecArr;
 implementation
 
 { BusRoute }
 
-constructor BusRoute.Create(Name: String; timeStart: String; timeEnd: String;
-  ID: String; price: real;MasterStopList: pStopArray);
+function BusRoute.GetAllLinkedRoutes: pBusRouteArr;
 var
-  Stop: initInfoRouteStop;
-  StopInfos: array of initInfoRouteStop;
+  stop: RouteStop;
+  StopRoutes: pBusRouteArr;
+  AllRoutes: pBusRouteArr;
+  LinkedRoutes: pBusRouteArr;
+begin
+  SetLength(LinkedRoutes,0);
+  for stop in Self.arrRouteStops do
+  begin
+    StopRoutes := stop.GetLinkedRoutes();
+    RemoveDupes(StopRoutes,AllRoutes);
+  end;
+  Result := AllRoutes;
+end;
+
+function BusRoute.FindStopOnRoute(RoutesToFind: pBusRouteArr): arrStopRouteLink;
+var
+  stop: RouteStop;
+  StopRoutes: pBusRouteArr;
+  LinkedRoute, Route: pRoute;
+  FoundLinks , FilteredLinks: arrStopRouteLink;
+  Link : StopRouteLink;
+begin
+  SetLength(FoundLinks,0);
+  for stop in self.arrRouteStops do
+  begin
+    StopRoutes := stop.GetLinkedRoutes();
+    for Route in RoutesToFind do
+    begin
+
+      for LinkedRoute in StopRoutes do
+      begin
+        if Route = LinkedRoute then
+        begin
+          Link.Route := Route;
+          Link.Stop := stop.GetStop;
+          SetLength(FoundLinks, length(FoundLinks)+1);
+          FoundLinks[length(FoundLinks)-1] := Link;
+        end;
+      end;
+    end;
+  end;
+  FilteredLinks := RemoveDupes(FoundLinks);
+  FoundLinks := nil;
+  Result := FilteredLinks;
+end;
+
+constructor BusRoute.Create(ID: String; timeEnd: String; timeStart: String;
+  price: real; Name: String);
 begin
   self.sName := Name;
   self.sTimeStart := timeStart;
   self.sTimeEnd := timeEnd;
   self.sID := ID;
   self.rPrice := price;
-  // Data base code place holder2
-  // Connect to data base and get info on route stops for this route.
-  //         Place that into a array of initInfoRouteStop's and
-  for Stop in StopInfos do
-  begin
-    SetLength(self.arrRouteStops, length(self.arrRouteStops) + 1);
-    self.arrRouteStops[Length(self.arrRouteStops)-1] := RouteStop.Create(
-                                                     MasterStopList,Stop);
-  end;
+  SetLength(self.arrRouteStops,0);
+  // pop stops list in a separtate function
 
+end;
 
+function BusRoute.PopulateRoute(Position: integer; linkedStop: pBusStop;
+  iinterval: integer): int16;
+var NewRouteStop : RouteStop;
+begin
+  // MAke this brand new BANGNING, EPIC route stop thing
+  NewRouteStop := RouteStop.Create(Position, linkedStop, iinterval);
+  // Add it to the route array thing in the route which is also in array which
+  //     is linked to in another array and.... yes
+  SetLength(self.arrRouteStops, length(self.arrRouteStops) + 1);
+  self.arrRouteStops[length(arrRouteStops)-1] := NewRouteStop;
+
+end;
+
+function BusRoute.GetID: string;
+begin
+  Result := self.sID;
+end;
+
+function BusRoute.GetHID: string;
+begin
+  Result := self.sName;
 end;
 
 { RouteStop }
 
-constructor RouteStop.Create(pToArrStops: pStopArray; info: initInfoRouteStop);
-var
-  stop : BusStop;
+constructor RouteStop.Create(POS: integer; Stop: pBusStop; TimeInterval: integer
+  );
 begin
-  iInterval := info.interval;
-  for stop in pToArrStops^ do
-     if stop.GetID = info.ID then break;
-  Self.linkedStop := @stop;
-  Self.routePOS := info.pos;
+  self.routePOS := POS;
+  self.linkedStop := Stop;
+  self.iInterval := iinterval;
 end;
-
+// I have absolutely no clue why this is here, what it
+//   is supposed to do or anything else about it.
 function RouteStop.isStop(stop:pBusStop): boolean;
 begin
   if Self.linkedStop = stop then Result:=True
   else Result := False;
+end;
+
+function RouteStop.GetLinkedRoutes: pBusRouteArr;
+begin
+  Result := Self.linkedStop^.GetRoutes();
+end;
+
+function RouteStop.GetStop: pBusStop;
+begin
+  Result := self.linkedStop;
 end;
 
 { BusStop }
@@ -191,6 +306,7 @@ var
   count: Integer;
   newFound : pArr;
 begin
+  // This function is broken but im leaving it here because of sentimental value
   // The Way this works is a bit unconventional, instead of modifying variables
   //     inside of the function and returning their results, this modifys
   //     variables outside of the function and does not return a result directly
@@ -201,7 +317,7 @@ begin
   //     this justifys the need for this approach that uses lots of pointers.
 
   // Go through each adjasent node
-  For Stop in aClose do
+  {For Stop in aClose do
   begin
     // If the current node is the destination
     if Stop = FinnalStop then
@@ -287,13 +403,195 @@ begin
     //       it feels cool writing something as crazy as this. Feel free to use
     //       this.
 
+end;}
 end;
+
+function BusStop.GetRoutes(): pBusRouteArr;
+begin
+  Result := Copy(self.aClose);
+end;
+
+function IsCommonRoute(Test1: pBusRouteArr; Test2: pBusRouteArr
+  ): pBusRouteArr;
+var
+  comp1, comp2: pRoute;
+  common : pBusRouteArr;
+begin
+  // Set leng
+  setlength(common,0);
+  // Check each element
+  for comp1 in Test1 do
+      begin
+        for comp2 in Test2 do
+            begin
+              // if they are = then add to common
+              if comp2 = comp1 then
+              begin
+                setlength(common,length(common)+1);
+                common[length(common)-1] := comp1;
+              end;
+            end;
+      end;
+  // return
+  Result := common;
+end;
+
+function IsCommonRoute(Test1: pBusStop; Test2: pBusStop): StopRouteLink;
+begin
+
+end;
+
+procedure RemoveDupes(Modify: pBusRouteArr; var Modifer: pBusRouteArr);
+var
+  count: Integer;
+  found: pRoute;
+begin
+  for found in Modifer do
+  begin
+    count := 0;
+    while (count <= length(Modify)) and (Length(Modify) > 0) do
+    begin
+      if found = Modify[length(Modify)-1-count] then
+      begin
+        Modify[length(Modify)-1-count] := Modify[length(Modify)-1];
+        SetLength(Modify,length(Modify)-1);
+      end;
+      inc(Count);
+  end;
+  end;
+  for found in Modify do
+  begin
+    SetLength(Modifer,length(Modifer)+1);
+    Modifer[length(Modifer)-1] := found;
+  end;
+end;
+
+procedure RemoveDupes(var arr: pBusRouteArr);
+var
+  duparr : pBusRouteArr;
+  check, dupe: pRoute;
+  bDupe: Boolean;
+begin
+  duparr := arr;
+  SetLength(arr,0);
+  bDupe := False;
+  for check in duparr do
+  begin
+    for dupe in arr do
+    begin
+    if check = dupe then
+    begin
+      bDupe := True;
+      break;
+    end
+    else bDupe := False;
+    end;
+    if bDupe = False then
+    begin
+      SetLength(arr, length(arr)+1);
+      arr[length(arr)-1] := check;
+    end;
+  end;
+end;
+
+function RemoveDupes(var arr: arrStopRouteLink): arrStopRouteLink;
+var
+  duparr, newArr: arrStopRouteLink;
+  dupe, check: StopRouteLink;
+  bDupe: Boolean;
+begin
+  duparr := arr;
+  // Strange issues with memory force me to do this.
+  //         I to this day cannot for the life of me
+  //         Understand why it segfaults if you use
+  //         the orriginal arr variable but what ever.
+  SetLength(newArr,0);
+  bDupe := False;
+  for check in duparr do
+  begin
+    for dupe in newArr do
+    begin
+    if (check.Stop = dupe.Stop) and (check.Route = dupe.Route) then
+    begin
+      bDupe := True;
+      break;
+    end
+    else bDupe := False;
+      end;
+    if bDupe = False then
+    begin
+      SetLength(NewArr, length(NewArr)+1);
+      SetLength(NewArr,Length(Newarr));
+      Newarr[length(Newarr)-1] := check;
+    end;
+  end;
+  Result := newArr;
+end;
+
+function FindDupes(Modify: pBusRouteArr; Modifer: pBusRouteArr):pBusRouteArr;
+var
+  Dupes : pBusRouteArr;
+  potentialDupe, found: pRoute;
+begin
+  SetLength(Dupes,0);
+  for found in Modifer do
+    begin
+      for potentialDupe in Modify do
+        begin
+          if found = potentialDupe then
+          begin
+            SetLength(Dupes,length(Dupes)+1);
+            Dupes[length(Dupes)-1] := found;
+            break;
+          end;
+        end;
+    end;
+  Result := Dupes;
+end;
+
+function FindIntersections(Test1: arrStopRouteLink; Test2: arrStopRouteLink
+  ): RouteIntesecArr;
+var
+  Intersect2, Intersect1: StopRouteLink;
+  ResArray : RouteIntesecArr;
+  Count: Integer;
+begin
+  SetLength(ResArray,0);
+  Count := 0;
+  for Intersect1 in Test1 do
+    begin
+      for Intersect2 in Test2 do
+        begin
+          if Intersect1.Route = Intersect2.Route then
+          begin
+            inc(Count);
+            SetLength(ResArray,count,2);
+            ResArray[count-1,0] := Intersect1;
+            ResArray[count-1,1] := Intersect2;
+            break;
+          end;
+        end;
+    end;
+  Result := ResArray;
 end;
 
 // If you can't figure this one out...
 function BusStop.GetID: string;
 begin
   Result := sID;
+end;
+
+function BusStop.GetName: string;
+begin
+  Result := self.sLocation;
+end;
+
+function BusStop.GetLinkedRoutes: string;
+var
+  Route: pBusRoute;
+begin
+  Route := self.aClose[length(aClose)-1];
+  Result := Route^.GetID();
 end;
 
 constructor BusStop.Create(Name: String; ID: String; Location: String);
@@ -310,7 +608,7 @@ begin
     end;
   end;
 
-procedure BusStop.AddClose(Stop: pBusStop);
+procedure BusStop.AddClose(Stop: pBusRoute);
 begin
   // Add new block
   SetLength(aClose, Length(aClose) + 1);
@@ -320,7 +618,7 @@ end;
 
 procedure BusStop.AddClose(Stops: array of pointer);
 var
-  Stop: pBusStop;
+  Stop: pBusRoute;
 begin
   // Overloaded version of the AddClose thing. I am probably going to do away
   //            with the old one and only use this one as its more generic
@@ -333,19 +631,53 @@ begin
   end;
 end;
 
-function BusStop.FindRouteInit(FinnalStop: Pointer): pRouteArray;
+function BusStop.FindRouteInit(FinnalStop: pBusStop): pBusRouteArr;
 var
-  // Used to Check that we are not going where we were.
-  Backwards : TFPHashList;
-  // A list of possible routes that is manipuated in the other function.
-  Found : pRouteArray;
+  CommonRoutes: pBusRouteArr;
+  EndRoutes, StartRoutes, AllLinkedStart, AllLinkedEnd, Path: pBusRouteArr;
+  StartRoute, EndRoute: pRoute;
+  StartConnect, EndConnect, each: arrStopRouteLink;
+  InterSections: RouteIntesecArr;
+  count: Integer;
 begin
-  Backwards := TFPHashList.Create();
-  Backwards.Capacity := 5000;
-  //  Backwards and Found are refrenced for future modification.
-  FindRoute(FinnalStop, @Backwards, @Found,1);
-  //  No need to derefrence as this is orriginal variable
-  Result := Found;
+  // Get connected Routes for both stops and see if there are common routes
+  count := 0;
+  StartRoutes := self.GetRoutes();
+  EndRoutes := FinnalStop^.GetRoutes();
+  CommonRoutes := IsCommonRoute(StartRoutes, EndRoutes);
+  // If direct route then go at it. else
+  if Length(CommonRoutes) < 1 then
+  begin
+    for StartRoute in StartRoutes do
+    begin
+      // Iterate and look for common routes that intersect the other routes
+      AllLinkedStart := StartRoute^.GetAllLinkedRoutes;
+      for EndRoute in EndRoutes do
+      begin
+        AllLinkedEnd := EndRoute^.GetAllLinkedRoutes;
+        Path := IsCommonRoute(AllLinkedStart,AllLinkedEnd);
+        // IF there are common routes then we have a valid route
+        if length(Path) > 0 then
+        begin
+          RemoveDupes(Path);
+          StartConnect := StartRoute^.FindStopOnRoute(Path);
+          EndConnect := EndRoute^.FindStopOnRoute(Path);
+          InterSections := FindIntersections(StartConnect,EndConnect);
+          for each in InterSections do
+          begin
+            writeln(each[0].Stop^.GetName + ': ' + each[1].Route^.GetHID + #9 +
+                                          each[1].Stop^.GetName + ': ' +
+                                          each[1].Route^.GetHID);
+            Inc(count);
+          end;
+          writeln(#13 + '________________________________' + #13);
+
+        end;
+      end;
+    end;
+  end;
+  WriteLn(IntToStr(Count));
+  Result := Path;
 end;
 
 function BusStop.ToString: ansistring;
