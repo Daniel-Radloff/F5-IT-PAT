@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <Compiler Value="/usr/bin/fpc" Date="1557783618"/>
-  <Params Value=" -MObjFPC -Scghi -Cg -O1 -g -gl -l -vewnhibq &quot;-Fi/home/daniel/Documents/School_work/Form 5 IT PAT PROGRAM/Test/lib/x86_64-linux&quot; &quot;-Fu/home/daniel/Documents/School_work/Form 5 IT PAT PROGRAM&quot; -Fu/usr/lib/lazarus/packager/units/x86_64-linux &quot;-Fu/home/daniel/Documents/School_work/Form 5 IT PAT PROGRAM/Test/&quot; &quot;-FU/home/daniel/Documents/School_work/Form 5 IT PAT PROGRAM/Test/lib/x86_64-linux/&quot; &quot;-FE/home/daniel/Documents/School_work/Form 5 IT PAT PROGRAM/Test/&quot; &quot;-o/home/daniel/Documents/School_work/Form 5 IT PAT PROGRAM/Test/UnitTesting&quot; UnitTesting.lpr"/>
+  <Params Value=" -MObjFPC -Scghi -Cg -O1 -g -gl -l -vewnhibq -Fi/home/daniel/Documents/Programming/Delphi/F5-IT-PAT/Test/lib/x86_64-linux -Fu/home/daniel/Documents/Programming/Delphi/F5-IT-PAT -Fu/usr/lib/lazarus/packager/units/x86_64-linux -Fu/home/daniel/Documents/Programming/Delphi/F5-IT-PAT/Test/ -FU/home/daniel/Documents/Programming/Delphi/F5-IT-PAT/Test/lib/x86_64-linux/ -FE/home/daniel/Documents/Programming/Delphi/F5-IT-PAT/Test/ -o/home/daniel/Documents/Programming/Delphi/F5-IT-PAT/Test/UnitTesting UnitTesting.lpr"/>
+  <Complete Value="False"/>
 </CONFIG>

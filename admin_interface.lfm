@@ -1,12 +1,12 @@
 object Form3: TForm3
-  Left = 517
+  Left = 277
   Height = 422
   Top = 280
   Width = 836
   Caption = 'Form3'
   ClientHeight = 422
   ClientWidth = 836
-  LCLVersion = '2.0.6.0'
+  LCLVersion = '2.0.8.0'
   object GroupBox1: TGroupBox
     Left = 16
     Height = 392

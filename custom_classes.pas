@@ -89,11 +89,12 @@ type
     //    finds all posibble routes from the Stop it is run from to the stop
     //    specifyed. This is neccicary because of a limitation of delphi and
     //    this was the only way around it that I could think of.
-    Function FindRouteInit(FinnalStop:pBusStop) : pBusRouteArr;
+    Function FindRouteInit(FinnalStop:pBusStop) : RouteIntesecArr;
     function ToString: ansistring; override;
     function GetID: string;
     function GetName:string;
     function GetLinkedRoutes: string;
+    destructor Destroy(); override;
     { Public End }
 
   end;
@@ -131,6 +132,8 @@ type
     function isStop(stop: pBusStop): boolean;
     function GetLinkedRoutes:pBusRouteArr;
     function GetStop:pBusStop;
+  public
+    destructor Destroy(); override;
 
 
   end;
@@ -164,6 +167,7 @@ type
         iinterval:integer):int16;
       function GetID:string;
       function GetHID:string;
+      destructor Destroy(); override;
 
   end;
    // A array of all routes, used in engine for init,cals and other
@@ -190,9 +194,7 @@ var
   stop: RouteStop;
   StopRoutes: pBusRouteArr;
   AllRoutes: pBusRouteArr;
-  LinkedRoutes: pBusRouteArr;
 begin
-  SetLength(LinkedRoutes,0);
   for stop in Self.arrRouteStops do
   begin
     StopRoutes := stop.GetLinkedRoutes();
@@ -256,7 +258,7 @@ begin
   //     is linked to in another array and.... yes
   SetLength(self.arrRouteStops, length(self.arrRouteStops) + 1);
   self.arrRouteStops[length(arrRouteStops)-1] := NewRouteStop;
-
+  Result := 0;
 end;
 
 function BusRoute.GetID: string;
@@ -267,6 +269,17 @@ end;
 function BusRoute.GetHID: string;
 begin
   Result := self.sName;
+end;
+
+destructor BusRoute.Destroy();
+var
+		  stop: RouteStop;
+begin
+  for stop in self.arrRouteStops do
+  begin
+    stop.Destroy();
+  end;
+  inherited;
 end;
 
 { RouteStop }
@@ -296,15 +309,21 @@ begin
   Result := self.linkedStop;
 end;
 
+destructor RouteStop.Destroy();
+begin
+  self.linkedStop := nil;
+  inherited;
+end;
+
 { BusStop }
 
 procedure BusStop.FindRoute(FinnalStop: Pointer; CurrentRoute: pTFPHashList;
   Found: pRouteArrayp; Depth: integer);
-var
+{var
   Stop, Been : ^BusStop;
   Back: Boolean;
   count: Integer;
-  newFound : pArr;
+  newFound : pArr;}
 begin
   // This function is broken but im leaving it here because of sentimental value
   // The Way this works is a bit unconventional, instead of modifying variables
@@ -594,6 +613,12 @@ begin
   Result := Route^.GetID();
 end;
 
+destructor BusStop.Destroy();
+begin
+  setLength(self.aClose,0);
+  inherited;
+end;
+
 constructor BusStop.Create(Name: String; ID: String; Location: String);
 begin
   try
@@ -631,17 +656,19 @@ begin
   end;
 end;
 
-function BusStop.FindRouteInit(FinnalStop: pBusStop): pBusRouteArr;
+function BusStop.FindRouteInit(FinnalStop: pBusStop): RouteIntesecArr;
 var
   CommonRoutes: pBusRouteArr;
   EndRoutes, StartRoutes, AllLinkedStart, AllLinkedEnd, Path: pBusRouteArr;
   StartRoute, EndRoute: pRoute;
   StartConnect, EndConnect, each: arrStopRouteLink;
-  InterSections: RouteIntesecArr;
-  count: Integer;
+  InterSections, FullRoute: RouteIntesecArr;
+  FirstOfFinnal, LastOfFinnal : StopRouteLink;
+  count, FinnalCount: Integer;
 begin
   // Get connected Routes for both stops and see if there are common routes
   count := 0;
+  FinnalCount := 0;
   StartRoutes := self.GetRoutes();
   EndRoutes := FinnalStop^.GetRoutes();
   CommonRoutes := IsCommonRoute(StartRoutes, EndRoutes);
@@ -663,6 +690,7 @@ begin
           StartConnect := StartRoute^.FindStopOnRoute(Path);
           EndConnect := EndRoute^.FindStopOnRoute(Path);
           InterSections := FindIntersections(StartConnect,EndConnect);
+          // for debuging purposes
           for each in InterSections do
           begin
             writeln(each[0].Stop^.GetName + ': ' + each[1].Route^.GetHID + #9 +
@@ -671,13 +699,26 @@ begin
             Inc(count);
           end;
           writeln(#13 + '________________________________' + #13);
-
-        end;
+          // Make full route
+          for each in InterSections do
+          begin
+            FirstOfFinnal.Stop := @self;
+            LastOfFinnal.Stop := FinnalStop;
+            FirstOfFinnal.Route := StartRoute;
+            LastOfFinnal.Route := EndRoute;
+            SetLength(FullRoute,FinnalCount+1,4);
+            FullRoute[FinnalCount,0] := FirstOfFinnal;
+            FullRoute[FinnalCount,1] := each[0];
+            FullRoute[FinnalCount,2] := each[1];
+            FullRoute[FinnalCount,3] := LastOfFinnal;
+            inc(FinnalCount);
+		  end;
+		end;
       end;
     end;
   end;
   WriteLn(IntToStr(Count));
-  Result := Path;
+  Result := FullRoute;
 end;
 
 function BusStop.ToString: ansistring;

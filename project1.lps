@@ -46,6 +46,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="Admin_interface"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="3"/>
         <TopLine Value="8"/>
         <CursorPos X="15" Y="12"/>
@@ -61,7 +62,7 @@
         <ResourceBaseClass Value="DataModule"/>
         <UnitName Value="Data_Connection"/>
         <EditorIndex Value="6"/>
-        <TopLine Value="26"/>
+        <TopLine Value="55"/>
         <CursorPos X="51" Y="44"/>
         <UsageCount Value="108"/>
         <Loaded Value="True"/>
@@ -99,7 +100,7 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="Custom_Classes"/>
         <EditorIndex Value="8"/>
-        <TopLine Value="298"/>
+        <TopLine Value="697"/>
         <CursorPos Y="309"/>
         <UsageCount Value="81"/>
         <Loaded Value="True"/>
@@ -108,9 +109,8 @@
         <Filename Value="engine.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="Engine"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="2"/>
-        <TopLine Value="40"/>
+        <TopLine Value="290"/>
         <CursorPos X="24" Y="121"/>
         <UsageCount Value="65"/>
         <Loaded Value="True"/>

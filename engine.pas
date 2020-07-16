@@ -25,7 +25,8 @@ type
     function StopsToInt():integer;
     // Delete when the thing works, this is terrible
     function GiveStopsArr(): Custom_Classes.pStopArray;
-    function GetRoute(sStart: string; sEnd: string): pBusRouteArr;
+    function GetRoute(sStart: string; sEnd: string): RouteIntesecArr;
+    destructor Destroy; overload;
 
   end;
 
@@ -275,13 +276,33 @@ begin
   Result := @self.BusStops;
 end;
 
-function APEngine.GetRoute(sStart: string; sEnd: string): pBusRouteArr;
+function APEngine.GetRoute(sStart: string; sEnd: string): RouteIntesecArr;
 var
   pbStart, pbEnd: pBusStop;
 begin
   pbStart := BinSearchRaw(pBusStops,sStart);
   pbEnd := BinSearchRaw(pBusStops, sEnd);
   Result := pbStart^.FindRouteInit(pbEnd);
+end;
+
+destructor APEngine.Destroy;
+var
+		  x: BusRoute;
+		  y: BusStop;
+		  z: pBusStop;
+		  c: pRoute;
+begin
+  for y in self.BusStops do
+  begin
+    y.Destroy();
+  end;
+  SetLength(pBusStops,0);
+  SetLength(pAllRoutes,0);
+  for x in self.AllRoutes do
+  begin
+    x.Destroy;
+  end;
+  inherited;
 end;
 
 end.
