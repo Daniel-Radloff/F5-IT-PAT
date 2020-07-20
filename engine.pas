@@ -8,7 +8,13 @@ uses
   Classes, SysUtils, Custom_Classes, Data_Connection, db;
 
 type
+  FullRouteWithTimes = record
+    RouteAndStop : StopRouteLink;
+    DepartureTime : integer;
+  end;
 
+
+  FullRouteArr = array of array of FullRouteWithTimes;
   { APEngine }
 
   APEngine = class
@@ -25,7 +31,8 @@ type
     function StopsToInt():integer;
     // Delete when the thing works, this is terrible
     function GiveStopsArr(): Custom_Classes.pStopArray;
-    function GetRoute(sStart: string; sEnd: string): RouteIntesecArr;
+    function GetRoute(sStart: string; sEnd: string; StartTime: integer;
+      EndTime: integer): RouteIntesecArr;
     destructor Destroy; overload;
 
   end;
@@ -276,32 +283,127 @@ begin
   Result := @self.BusStops;
 end;
 
-function APEngine.GetRoute(sStart: string; sEnd: string): RouteIntesecArr;
+function APEngine.GetRoute(sStart: string; sEnd: string; StartTime: integer;
+  EndTime: integer): RouteIntesecArr;
 var
   pbStart, pbEnd: pBusStop;
+  ViableRoutes: RouteIntesecArr;
+  Route: arrStopRouteLink;
+  FullCalculatedRoute : FullRouteArr;
+  TempFullRoute : FullRouteWithTimes;
+  Intervals , ArrivalInterval: TimeCalcArr;
+  tStartTime, RouteStartTime, count, FullInterval,
+    TotalCount, Iinterval, BusArrival, LoopCount: Integer;
+  Interval: IntArr;
 begin
+  // Get Stops to look for
   pbStart := BinSearchRaw(pBusStops,sStart);
   pbEnd := BinSearchRaw(pBusStops, sEnd);
-  Result := pbStart^.FindRouteInit(pbEnd);
+  ViableRoutes := pbStart^.FindRouteInit(pbEnd);
+
+  // Great. Now look for times that link closely with the route
+  // Keeps track for FullCalculatedRoute array
+  TotalCount := 0;
+  SetLength(FullCalculatedRoute,length(ViableRoutes));
+  tStartTime := StartTime;
+  For Route in ViableRoutes do
+  begin
+    // A Route is a group of Intersections that lead onto different routes
+    count := 0;
+    Inc(TotalCount);
+    while not count = length(Route)-1 do
+    begin
+      RouteStartTime := Route[count].Route^.GetRouteStart;
+      // Get next interval
+      FullInterval := Route[Count].Route^.GetFullInterval;
+      // Calculate Closest Time that we depart at for default
+      // case is much faster than a if because of how it is compiled and
+      //      executed at runtime. Kindof works like a hash table so it will
+      //      imediatly jump to the else statement without comparing our
+      //      count var.
+      case count of
+      0 :
+        begin
+
+          // We do this for first stop because we can either arrive before
+          //    Specifyed time or after
+          Interval := route[0].Route^.GetStopInterval(Route[0].Stop);
+          while RouteStartTime + FullInterval + interval[0] < tStartTime do
+          begin
+               interval[0] := interval[0] + FullInterval;
+          end;
+          if (interval[0] + FullInterval)-StartTime > abs(interval[0] - StartTime) then
+             interval[0] := interval[0] + FullInterval;
+          Iinterval := interval[0] + RouteStartTime;
+        end;
+
+      else
+        begin
+          // Get some values by using patterns to know what values we can use
+          ArrivalInterval := Route[count-1].Route^.GetStopInterval(
+                        Route[count-1].Stop, Route[count].Stop);
+          //        Calc when bus will arrive
+          BusArrival := (ArrivalInterval[1].interval -
+                   ArrivalInterval[0].interval) + tStartTime;
+          //         Get Stop arrival intervals for new route
+          Interval := Route[count].Route^.GetStopInterval(Route[count].Stop);
+          LoopCount := 0;
+          While loopCount < length(Interval)-1 do
+          begin
+            // We need to be at the stop before the bus is so we go till
+            //    we go over and then add that full interval after the loop
+            while RouteStartTime + FullInterval + interval[LoopCount]
+                  < BusArrival do
+            begin
+              interval[LoopCount] := interval[LoopCount] + FullInterval;
+            end;
+            Interval[LoopCount] := Interval[LoopCount] + FullInterval;
+          end;
+        end;
+      end;
+      // Inc Length
+      setLength(FullCalculatedRoute[Totalcount],count+1);
+      // Assign Vals
+      TempFullRoute.RouteAndStop := Route[Count];
+      TempFullRoute.DepartureTime := interval;
+      // Assign to arr
+      FullCalculatedRoute[TotalCount,count] := TempFullRoute;
+      Inc(Count);
+      tStartTime := Iinterval;
+    end;
+  end;
 end;
 
 destructor APEngine.Destroy;
 var
-		  x: BusRoute;
-		  y: BusStop;
-		  z: pBusStop;
-		  c: pRoute;
+  count : integer;
 begin
-  for y in self.BusStops do
+  count := 0;
+  While not count = length(self.BusStops) do
   begin
-    y.Destroy();
+    FreeAndNil(self.BusStops[count]);
+    inc(Count)
   end;
-  SetLength(pBusStops,0);
-  SetLength(pAllRoutes,0);
-  for x in self.AllRoutes do
+  count := 0;
+  While not count = length(self.AllRoutes) do
   begin
-    x.Destroy;
+    FreeAndNil(self.AllRoutes[count]);
+    inc(count);
   end;
+  count := 0;
+  while not count = length(self.pAllRoutes) do
+  begin
+    Self.pAllRoutes[count] := nil;
+    inc(count);
+  end;
+  setLength(self.pAllRoutes,0);
+  count := 0;
+  while not count = length(self.pBusStops) do
+  begin
+    self.pBusStops[count] := nil;
+    inc(count);
+  end;
+  setLEngth(self.pBusStops,0);
   inherited;
 end;
 

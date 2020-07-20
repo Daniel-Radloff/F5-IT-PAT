@@ -50,6 +50,12 @@ type
   end;
   arrStopRouteLink = array of StopRoutelink;
   RouteIntesecArr = array of arrStopRouteLink;
+  TimeCalc = record
+    Stop : pBusStop;
+    interval : integer;
+  end;
+  TimeCalcArr = array of TimeCalc;
+  IntArr = array of integer;
 
 
   { BusStop }
@@ -132,6 +138,8 @@ type
     function isStop(stop: pBusStop): boolean;
     function GetLinkedRoutes:pBusRouteArr;
     function GetStop:pBusStop;
+    function GetInterval:integer;
+    function GetPos:integer;
   public
     destructor Destroy(); override;
 
@@ -167,6 +175,11 @@ type
         iinterval:integer):int16;
       function GetID:string;
       function GetHID:string;
+      function GetStopInterval(Stop:pBusStop; Stop2:pBusStop):TimeCalcArr;
+      function GetStopInterval(Stop:pBusStop):IntArr; overload;
+      function GetRouteStart: integer;
+      // Get the full route interval
+      function GetFullInterval: integer;
       destructor Destroy(); override;
 
   end;
@@ -271,6 +284,109 @@ begin
   Result := self.sName;
 end;
 
+function BusRoute.GetStopInterval(Stop: pBusStop; Stop2: pBusStop): TimeCalcArr;
+var
+  EachStop : RouteStop;
+  Intervals : array of TimeCalc;
+  TempInterval : TimeCalc;
+  count : integer;
+begin
+  for EachStop in self.arrRouteStops do
+  begin
+    // If We Find stop that were going to then
+    if EachStop.GetStop = Stop2 then
+    begin
+      setlength(Intervals,length(intervals)+1);
+      TempInterval.Stop := Stop2;
+      TempInterval.interval := EachStop.GetInterval;
+      Intervals[length(intervals)-1] := TempInterval;
+    end;
+    if EachStop.GetStop = Stop then
+    begin
+      setlength(Intervals,length(intervals)+1);
+      TempInterval.Stop := Stop;
+      TempInterval.interval := EachStop.GetInterval;
+      Intervals[length(intervals)-1] := TempInterval;
+    end;
+  end;
+  count := 0;
+  While length(intervals)-1 < count + 1 do
+  begin
+    if (Intervals[count].Stop = Stop) and (Intervals[count+1].Stop = Stop2) then
+    begin
+      Result := Copy(Intervals,count,2);
+      break;
+    end;
+    inc(count);
+  end;
+  // if none found append dupe arr and modify dupe vals
+  SetLength(Intervals,length(Intervals)*2);
+  count := 0;
+  while count < Trunc(length(Intervals)/2)-1 do
+  begin
+    Intervals[count+Trunc(length(Intervals)/2-1)] := Intervals[Count];
+    Inc(count);
+  end;
+  // Perform again but start at half-1 because other half has been checked and
+  //         Stop at half + 2
+  count := Trunc(length(Intervals)/2)-1;
+  While Trunc(length(intervals)/2)+2 < count + 1 do
+  begin
+    if (Intervals[count].Stop = Stop) and (Intervals[count+1].Stop = Stop2) then
+    begin
+      Result := Copy(Intervals,count,2);
+      break;
+    end;
+    inc(count);
+  end;
+  // If still nothing then give up
+  Result := nil;
+end;
+
+function BusRoute.GetStopInterval(Stop: pBusStop): IntArr;
+var
+  Each : RouteStop;
+  Intervals : array of integer;
+begin
+  setlength(Intervals,0);
+  for Each in self.arrRouteStops do
+  begin
+    if Each.GetStop = Stop then
+    begin
+      SetLength(Intervals,length(Intervals)+1);
+      Intervals[length(Intervals)-1] := Each.GetInterval;
+    end;
+  end;
+  Result := Intervals;
+end;
+
+function BusRoute.GetRouteStart: integer;
+var
+  iTime: LongInt;
+  sTime: String;
+  half: Int64;
+begin
+  sTime := self.sTimeStart;
+  half := trunc(length(sTime)/2);
+  if half = 2 then
+  begin
+    iTime := StrToInt(Copy(sTime,0,2))*60;
+    iTime := iTime + StrToInt(Copy(sTime,2,2));
+    Result := iTime;
+  end
+  else
+  begin
+    iTime := StrToInt(Copy(sTime,0,1))*60;
+    iTime := iTime + StrToInt(Copy(sTime,1,2));
+    Result := iTime;
+  end;
+end;
+
+function BusRoute.GetFullInterval: integer;
+begin
+  Result := self.arrRouteStops[length(arrRouteStops)-1].GetInterval;
+end;
+
 destructor BusRoute.Destroy();
 var
 		  stop: RouteStop;
@@ -279,6 +395,7 @@ begin
   begin
     stop.Destroy();
   end;
+  arrRouteStops := nil;
   inherited;
 end;
 
@@ -307,6 +424,16 @@ end;
 function RouteStop.GetStop: pBusStop;
 begin
   Result := self.linkedStop;
+end;
+
+function RouteStop.GetInterval: integer;
+begin
+  Result := self.iInterval;
+end;
+
+function RouteStop.GetPos: integer;
+begin
+  Result := self.routePOS;
 end;
 
 destructor RouteStop.Destroy();
