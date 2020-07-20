@@ -95,7 +95,7 @@ type
     //    finds all posibble routes from the Stop it is run from to the stop
     //    specifyed. This is neccicary because of a limitation of delphi and
     //    this was the only way around it that I could think of.
-    Function FindRouteInit(FinnalStop:pBusStop) : RouteIntesecArr;
+    Function FindRouteInit(FinnalStop:pBusStop; StartStop:pBusStop) : RouteIntesecArr;
     function ToString: ansistring; override;
     function GetID: string;
     function GetName:string;
@@ -294,14 +294,14 @@ begin
   for EachStop in self.arrRouteStops do
   begin
     // If We Find stop that were going to then
-    if EachStop.GetStop = Stop2 then
+    if EachStop.GetStop^ = Stop2^ then
     begin
       setlength(Intervals,length(intervals)+1);
       TempInterval.Stop := Stop2;
       TempInterval.interval := EachStop.GetInterval;
       Intervals[length(intervals)-1] := TempInterval;
     end;
-    if EachStop.GetStop = Stop then
+    if EachStop.GetStop^ = Stop^ then
     begin
       setlength(Intervals,length(intervals)+1);
       TempInterval.Stop := Stop;
@@ -310,11 +310,12 @@ begin
     end;
   end;
   count := 0;
-  While length(intervals)-1 < count + 1 do
+  While length(intervals) > count + 1 do
   begin
-    if (Intervals[count].Stop = Stop) and (Intervals[count+1].Stop = Stop2) then
+    if (Intervals[count].Stop^ = Stop^) and (Intervals[count+1].Stop^ = Stop2^) then
     begin
       Result := Copy(Intervals,count,2);
+      Exit;
       break;
     end;
     inc(count);
@@ -322,19 +323,20 @@ begin
   // if none found append dupe arr and modify dupe vals
   SetLength(Intervals,length(Intervals)*2);
   count := 0;
-  while count < Trunc(length(Intervals)/2)-1 do
+  while count < Trunc(length(Intervals)/2) do
   begin
-    Intervals[count+Trunc(length(Intervals)/2-1)] := Intervals[Count];
+    Intervals[count+Trunc(length(Intervals)/2)] := Intervals[Count];
     Inc(count);
   end;
   // Perform again but start at half-1 because other half has been checked and
   //         Stop at half + 2
   count := Trunc(length(Intervals)/2)-1;
-  While Trunc(length(intervals)/2)+2 < count + 1 do
+  While Trunc(length(intervals)/2) > count do
   begin
     if (Intervals[count].Stop = Stop) and (Intervals[count+1].Stop = Stop2) then
     begin
       Result := Copy(Intervals,count,2);
+      exit;
       break;
     end;
     inc(count);
@@ -406,7 +408,7 @@ constructor RouteStop.Create(POS: integer; Stop: pBusStop; TimeInterval: integer
 begin
   self.routePOS := POS;
   self.linkedStop := Stop;
-  self.iInterval := iinterval;
+  self.iInterval := TimeInterval;
 end;
 // I have absolutely no clue why this is here, what it
 //   is supposed to do or anything else about it.
@@ -783,7 +785,8 @@ begin
   end;
 end;
 
-function BusStop.FindRouteInit(FinnalStop: pBusStop): RouteIntesecArr;
+function BusStop.FindRouteInit(FinnalStop: pBusStop; StartStop: pBusStop
+  ): RouteIntesecArr;
 var
   CommonRoutes: pBusRouteArr;
   EndRoutes, StartRoutes, AllLinkedStart, AllLinkedEnd, Path: pBusRouteArr;
@@ -792,10 +795,12 @@ var
   InterSections, FullRoute: RouteIntesecArr;
   FirstOfFinnal, LastOfFinnal : StopRouteLink;
   count, FinnalCount: Integer;
+  Startptr: pBusStop;
 begin
   // Get connected Routes for both stops and see if there are common routes
   count := 0;
   FinnalCount := 0;
+  Startptr := @self;
   StartRoutes := self.GetRoutes();
   EndRoutes := FinnalStop^.GetRoutes();
   CommonRoutes := IsCommonRoute(StartRoutes, EndRoutes);
@@ -829,7 +834,7 @@ begin
           // Make full route
           for each in InterSections do
           begin
-            FirstOfFinnal.Stop := @self;
+            FirstOfFinnal.Stop := StartStop;
             LastOfFinnal.Stop := FinnalStop;
             FirstOfFinnal.Route := StartRoute;
             LastOfFinnal.Route := EndRoute;

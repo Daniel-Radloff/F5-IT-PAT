@@ -103,7 +103,7 @@ function APEngine.GetNewStops(): int16;
 var
   NewStop: BusStop;
   NewRoute, everyRoute: BusRoute;
-  RouteIDRaw, linked: String;
+  RouteIDRaw, linked, test: String;
   arrLinked : array of string;
   CVCPos, Count: Integer;
 begin
@@ -299,7 +299,7 @@ begin
   // Get Stops to look for
   pbStart := BinSearchRaw(pBusStops,sStart);
   pbEnd := BinSearchRaw(pBusStops, sEnd);
-  ViableRoutes := pbStart^.FindRouteInit(pbEnd);
+  ViableRoutes := pbStart^.FindRouteInit(pbEnd,pbStart);
 
   // Great. Now look for times that link closely with the route
   // Keeps track for FullCalculatedRoute array
@@ -311,7 +311,8 @@ begin
     // A Route is a group of Intersections that lead onto different routes
     count := 0;
     Inc(TotalCount);
-    while not count = length(Route)-1 do
+    tStartTime := StartTime;
+    while count < length(Route)-1 do
     begin
       RouteStartTime := Route[count].Route^.GetRouteStart;
       // Get next interval
@@ -328,7 +329,7 @@ begin
           // We do this for first stop because we can either arrive before
           //    Specifyed time or after
           Interval := route[0].Route^.GetStopInterval(Route[0].Stop);
-          while RouteStartTime + FullInterval + interval[0] < tStartTime do
+          while (RouteStartTime + FullInterval + interval[0]) < tStartTime do
           begin
                interval[0] := interval[0] + FullInterval;
           end;
@@ -346,7 +347,11 @@ begin
           BusArrival := (ArrivalInterval[1].interval -
                    ArrivalInterval[0].interval) + tStartTime;
           //         Get Stop arrival intervals for new route
-          if count = length(route)-2 then
+          // cant tell if >= matters because of loop condition but better safe
+          //      than access violation. If len 2 then loop I think loop will
+          //      catch it but im not 100% sure
+          //
+          if count >= length(route)-2 then
              break;
           // Do you even understand how much pain it took to get to this point?
           //    I cant be botherd to write another overloaded function that
@@ -364,6 +369,7 @@ begin
           end;
           NewRouteIntervals[0].interval := NewRouteIntervals[0].interval +
                                         FullInterval;
+          // Assign to out Iinterval value and add new route data
           Iinterval := NewRouteIntervals[0].interval;
         end;
       end;
@@ -377,6 +383,17 @@ begin
       Inc(Count);
       tStartTime := Iinterval;
     end;
+    NewRouteIntervals := Route[count+1].Route^.GetStopInterval(Route[count].Stop
+                      ,Route[count+1].Stop);
+    // Inc Length
+    setLength(FullCalculatedRoute[Totalcount],count+1);
+    // Assign Vals
+    TempFullRoute.RouteAndStop := Route[Count];
+    TempFullRoute.DepartureTime := Iinterval + NewRouteIntervals[1].interval;
+    // Assign to arr
+    FullCalculatedRoute[TotalCount,count] := TempFullRoute;
+    Inc(Count);
+    tStartTime := Iinterval;
   end;
 end;
 
