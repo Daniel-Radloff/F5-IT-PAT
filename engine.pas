@@ -291,7 +291,7 @@ var
   Route: arrStopRouteLink;
   FullCalculatedRoute : FullRouteArr;
   TempFullRoute : FullRouteWithTimes;
-  Intervals , ArrivalInterval: TimeCalcArr;
+  Intervals , ArrivalInterval, NewRouteIntervals: TimeCalcArr;
   tStartTime, RouteStartTime, count, FullInterval,
     TotalCount, Iinterval, BusArrival, LoopCount: Integer;
   Interval: IntArr;
@@ -346,26 +346,32 @@ begin
           BusArrival := (ArrivalInterval[1].interval -
                    ArrivalInterval[0].interval) + tStartTime;
           //         Get Stop arrival intervals for new route
-          Interval := Route[count].Route^.GetStopInterval(Route[count].Stop);
-          LoopCount := 0;
-          While loopCount < length(Interval)-1 do
-          begin
+          if count = length(route)-2 then
+             break;
+          // Do you even understand how much pain it took to get to this point?
+          //    I cant be botherd to write another overloaded function that
+          //    returns a more clean result at this moment. I'll kill
+          //    myself if I have to do that again.
+          NewRouteIntervals := Route[count].Route^.GetStopInterval(Route[count].Stop
+                      ,Route[count+1].Stop);
             // We need to be at the stop before the bus is so we go till
             //    we go over and then add that full interval after the loop
-            while RouteStartTime + FullInterval + interval[LoopCount]
-                  < BusArrival do
-            begin
-              interval[LoopCount] := interval[LoopCount] + FullInterval;
-            end;
-            Interval[LoopCount] := Interval[LoopCount] + FullInterval;
+          while RouteStartTime + FullInterval + NewRouteIntervals[0].interval
+                < BusArrival do
+          begin
+            NewRouteIntervals[0].interval := NewRouteIntervals[0].interval +
+                                          FullInterval;
           end;
+          NewRouteIntervals[0].interval := NewRouteIntervals[0].interval +
+                                        FullInterval;
+          Iinterval := NewRouteIntervals[0].interval;
         end;
       end;
       // Inc Length
       setLength(FullCalculatedRoute[Totalcount],count+1);
       // Assign Vals
       TempFullRoute.RouteAndStop := Route[Count];
-      TempFullRoute.DepartureTime := interval;
+      TempFullRoute.DepartureTime := Iinterval;
       // Assign to arr
       FullCalculatedRoute[TotalCount,count] := TempFullRoute;
       Inc(Count);
