@@ -289,7 +289,7 @@ var
   EachStop : RouteStop;
   Intervals : array of TimeCalc;
   TempInterval : TimeCalc;
-  count : integer;
+  count , FullRotation: integer;
 begin
   for EachStop in self.arrRouteStops do
   begin
@@ -323,15 +323,19 @@ begin
   // if none found append dupe arr and modify dupe vals
   SetLength(Intervals,length(Intervals)*2);
   count := 0;
-  while count < Trunc(length(Intervals)/2) do
+  FullRotation := self.GetFullInterval;
+  while count < Round(length(Intervals)/2) do
   begin
-    Intervals[count+Trunc(length(Intervals)/2)] := Intervals[Count];
+    TempInterval := Intervals[count];
+    TempInterval.interval := FullRotation + TempInterval.interval;
+    Intervals[count+(Round(length(Intervals)/2))] := TempInterval;
     Inc(count);
   end;
   // Perform again but start at half-1 because other half has been checked and
   //         Stop at half + 2
-  count := Trunc(length(Intervals)/2)-1;
-  While Trunc(length(intervals)/2) > count do
+  //       Never mind SEG fault
+  count := length(Intervals) - Trunc(length(Intervals)/2)-1;
+  While Trunc(length(intervals)/2)+1 > count do
   begin
     if (Intervals[count].Stop = Stop) and (Intervals[count+1].Stop = Stop2) then
     begin
