@@ -99,7 +99,11 @@ type
     function ToString: ansistring; override;
     function GetID: string;
     function GetName:string;
+    // Return all with CSV
     function GetLinkedRoutes: string;
+    // Return all with pointer arr. Use True or false to call
+    function GetLinkedRoutes(Pointers:Boolean): pBusRouteArr; overload;
+    procedure RemoveLinked(Route:pRoute);
     destructor Destroy(); override;
     { Public End }
 
@@ -130,6 +134,11 @@ type
     // Used to see where the stop is located within the sequence of stops that
     //      the route uses. Esentialy places stops in order so we know the
     //      order in which the route will stop.
+    // ok... I will admit, this is a really stupid value as the
+    //       stops are always in order and many parts of the program
+    //       require the stops to be in order but others need this
+    //       variable. I should refactor but I dont have time and it
+    //       is going to break so many things that its just not worth.
     routePOS : integer;
 
   Private
@@ -140,6 +149,10 @@ type
     function GetStop:pBusStop;
     function GetInterval:integer;
     function GetPos:integer;
+    procedure DecPos;
+    procedure IncPos;
+    procedure ChangeLinked(StopPtr:pBusStop);
+    procedure ChangeInterval(interval:integer);
   public
     destructor Destroy(); override;
 
@@ -180,7 +193,30 @@ type
       function GetRouteStart: integer;
       // Get the full route interval
       function GetFullInterval: integer;
+      procedure DeleteStop(POS:integer);
       destructor Destroy(); override;
+      // im too lazy to think of anything better... leave me alone
+      function GetLastPos():integer;
+      function GetStopAtPos(POS:integer):pBusStop;
+      // used to return pos of first instance of a stop in the route
+      //      not the best but I use in because I want to re-use some
+      //      other very complicated code. But it will probably come
+      //      in handy somewhere else to :)
+      function GetStopPos(Stop:pBusStop):integer;
+      // This clears route and returns all effected stops
+      function ClearRoute():pArr;
+      // Returns interval info on stops inbetween the selected position and next
+      function GetIntervalsFrom(POS:integer):IntArr;
+      // Get interval of stop. Im really sorry these are quite confusing;
+      function GetInterval(POS:integer):integer;
+      // Adds a stop to the route
+      procedure AddNewStop(Stop:pBusStop; StopPOS:integer; Interval:integer);
+      function DoesStopRepeat(Stop:pBusStop):boolean;
+      function IsStopInRoute(Stop:pBusStop):boolean;
+      procedure ChangeLinkedStop(Stop:pBusStop; StopPOS:integer);
+      procedure ChangeName(NewName:string);
+      procedure ChangeTimes(StartNew,EndNew:string);
+      procedure ChangePrice(NewPrice:real);
 
   end;
    // A array of all routes, used in engine for init,cals and other
@@ -377,13 +413,15 @@ begin
   if half = 2 then
   begin
     iTime := StrToInt(Copy(sTime,0,2))*60;
-    iTime := iTime + StrToInt(Copy(sTime,2,2));
+    Delete(sTime,1,2);
+    iTime := iTime + StrToInt(sTime);
     Result := iTime;
   end
   else
   begin
     iTime := StrToInt(Copy(sTime,0,1))*60;
-    iTime := iTime + StrToInt(Copy(sTime,1,2));
+    delete(sTime,1,1);
+    iTime := iTime + StrToInt(sTime);
     Result := iTime;
   end;
 end;
@@ -391,6 +429,47 @@ end;
 function BusRoute.GetFullInterval: integer;
 begin
   Result := self.arrRouteStops[length(arrRouteStops)-1].GetInterval;
+end;
+
+procedure BusRoute.DeleteStop(POS: integer);
+var
+  max, ToChange: Integer;
+begin
+  max := self.GetLastPos();
+  case POS of
+    0 : begin
+      self.arrRouteStops[POS].Destroy();
+      // reWrite array
+      while POS < length(self.arrRouteStops)-1 do
+      begin
+        self.arrRouteStops[POS] := self.arrRouteStops[POS+1];
+        self.arrRouteStops[POS].DecPos();
+        inc(POS);
+      end;
+      SetLength(self.arrRouteStops,length(self.arrRouteStops)-1);
+      // We need to change intervals... no clue how sql will look like
+      POS := 0;
+      while POS < Length(self.arrRouteStops) do
+      begin
+        ToChange := self.arrRouteStops[POS+1].GetInterval();
+        self.arrRouteStops[POS+1].ChangeInterval(ToChange -
+            self.arrRouteStops[POS].GetInterval);
+      end;
+      self.arrRouteStops[0].ChangeInterval(0);
+    end;
+    else begin
+    self.arrRouteStops[POS].Destroy();
+      // keep array in order because I can not remember
+      //      If it is important or not.
+    while POS < length(self.arrRouteStops)-1 do
+    begin
+    self.arrRouteStops[POS] := self.arrRouteStops[POS+1];
+    self.arrRouteStops[POS].DecPos();
+    inc(POS);
+    end;
+    SetLength(arrRouteStops,length(arrRouteStops)-1);
+    end;
+  end;
 end;
 
 destructor BusRoute.Destroy();
@@ -403,6 +482,124 @@ begin
   end;
   arrRouteStops := nil;
   inherited;
+end;
+
+function BusRoute.GetLastPos(): integer;
+begin
+  Result := length(self.arrRouteStops)-1;
+end;
+
+function BusRoute.GetStopAtPos(POS: integer): pBusStop;
+begin
+  Result := self.arrRouteStops[POS].GetStop()
+end;
+
+function BusRoute.GetStopPos(Stop: pBusStop): integer;
+var
+  each: RouteStop;
+begin
+  for each in self.arrRouteStops do
+  begin
+    if each.GetStop = Stop then Result := each.GetPos;
+  end;
+  Result := -1;
+end;
+
+function BusRoute.ClearRoute(): pArr;
+var
+   AffectedStops : pArr;
+   Stop: RouteStop;
+   Found: pBusStop;
+begin
+  for Stop in self.arrRouteStops do
+  begin
+    Stop.GetStop^.RemoveLinked(@self);
+    // I Cannot bring myself to writing a better way of doing this
+    for Found in AffectedStops do
+    if Stop.GetStop = Found then Continue;
+    SetLength(AffectedStops,length(AffectedStops)+1);
+    // yes it does use more CPU cycles, but we have them
+    AffectedStops[length(AffectedStops)-1] := Stop.GetStop;
+  end;
+  Result := AffectedStops;
+end;
+
+function BusRoute.GetIntervalsFrom(POS: integer): IntArr;
+begin
+  Result := IntArr.Create(self.arrRouteStops[POS].GetInterval,
+             self.arrRouteStops[POS+1].GetInterval);
+end;
+
+function BusRoute.GetInterval(POS: integer): integer;
+begin
+  Result := self.arrRouteStops[POS].GetInterval();
+end;
+
+procedure BusRoute.AddNewStop(Stop: pBusStop; StopPOS: integer;
+  Interval: integer);
+var
+   Compare, arrLen , count: integer;
+begin
+  SetLength(self.arrRouteStops,length(self.arrRouteStops)+1);
+  count := 0;
+  arrLen := Length(self.arrRouteStops);
+  // THIS WILL NOT WORK WITH NEW OR SHORT ROUTES OR POSITIONS
+  //      CLOSE TO THE END OF THE ROUTE.
+  //     FIX IT BEFORE YOU HAND IN!!!!!!!!!!!!!!!!!!!!!!!
+  compare := length(self.arrRouteStops)-StopPOS+3;
+  while count <= Compare do
+  begin
+    self.arrRouteStops[arrLen-count] :=
+     self.arrRouteStops[arrLen-Count-1];
+    self.arrRouteStops[arrlen-count].IncPos();
+    inc(count);
+  end;
+  self.arrRouteStops[StopPOS+1] := RouteStop.Create(StopPos+1,Stop,Interval);
+end;
+
+function BusRoute.DoesStopRepeat(Stop: pBusStop): boolean;
+var
+  Each: RouteStop;
+  count: Integer;
+begin
+  count := 0;
+  for Each in self.arrRouteStops do
+  begin
+    if Each.GetStop = Stop then Inc(Count);
+    if Count = 2 then Result := True;
+  end;
+  Result := False;
+end;
+
+function BusRoute.IsStopInRoute(Stop: pBusStop): boolean;
+var
+  each: RouteStop;
+begin
+  for each in self.arrRouteStops do
+  begin
+  if each.GetStop = Stop then Result := True;
+  end;
+end;
+
+procedure BusRoute.ChangeLinkedStop(Stop: pBusStop; StopPOS: integer);
+begin
+  self.arrRouteStops[StopPOS].ChangeLinked(Stop);
+end;
+
+procedure BusRoute.ChangeName(NewName: string);
+begin
+  self.sName := NewName;
+end;
+
+procedure BusRoute.ChangeTimes(StartNew, EndNew: string);
+begin
+  self.sTimeStart := StartNew;
+  self.sTimeEnd := EndNew;
+end;
+
+procedure BusRoute.ChangePrice(NewPrice: real);
+begin
+  self.rPrice := NewPrice;
 end;
 
 { RouteStop }
@@ -440,6 +637,26 @@ end;
 function RouteStop.GetPos: integer;
 begin
   Result := self.routePOS;
+end;
+
+procedure RouteStop.DecPos;
+begin
+  self.routePOS := self.routePOS-1;
+end;
+
+procedure RouteStop.IncPos;
+begin
+  Inc(self.routePOS);
+end;
+
+procedure RouteStop.ChangeLinked(StopPtr: pBusStop);
+begin
+  self.linkedStop := StopPtr;
+end;
+
+procedure RouteStop.ChangeInterval(interval: integer);
+begin
+  self.iInterval := interval;
 end;
 
 destructor RouteStop.Destroy();
@@ -741,9 +958,33 @@ end;
 function BusStop.GetLinkedRoutes: string;
 var
   Route: pBusRoute;
+  line : string;
 begin
-  Route := self.aClose[length(aClose)-1];
-  Result := Route^.GetID();
+  line := '';
+  for Route in self.aClose do
+    line := line + Route^.GetID + ',';
+  SetLength(line, length(line)-1);
+  Result := line;
+end;
+
+function BusStop.GetLinkedRoutes(Pointers: Boolean): pBusRouteArr;
+begin
+  Result := self.aClose;
+end;
+
+procedure BusStop.RemoveLinked(Route: pRoute);
+var
+  count : integer;
+begin
+  count := 0;
+  while count < length(self.aClose)-1 do
+  begin
+    if (self.aClose[count] = Route) then
+    begin
+      self.aClose[count] := self.aClose[length(Self.aClose)-1];
+      setlength(Self.aClose, length(self.aClose)-1);
+    end;
+  end;
 end;
 
 destructor BusStop.Destroy();
@@ -782,6 +1023,7 @@ begin
   //            with the old one and only use this one as its more generic
   //            to use a array compared to checking if there is one adjasent
   //            stop or many. With a array it will work either way.
+  // LOl these are routes now and not stops
   for Stop in Stops do
   begin
     SetLength(aClose, Length(aClose) + 1);
@@ -794,7 +1036,7 @@ function BusStop.FindRouteInit(FinnalStop: pBusStop; StartStop: pBusStop
 var
   CommonRoutes: pBusRouteArr;
   EndRoutes, StartRoutes, AllLinkedStart, AllLinkedEnd, Path: pBusRouteArr;
-  StartRoute, EndRoute: pRoute;
+  StartRoute, EndRoute, EveryCommonRoute: pRoute;
   StartConnect, EndConnect, each: arrStopRouteLink;
   InterSections, FullRoute: RouteIntesecArr;
   FirstOfFinnal, LastOfFinnal : StopRouteLink;
@@ -851,6 +1093,20 @@ begin
 		  end;
 		end;
       end;
+    end;
+  end
+  else
+  begin
+    for EveryCommonRoute in CommonRoutes do
+    begin
+    SetLength(FullRoute,FinnalCount+1,2);
+    FirstOfFinnal.Stop := StartStop;
+    LastOfFinnal.Stop := FinnalStop;
+    FirstOfFinnal.Route := EveryCommonRoute;
+    LastOfFinnal.Route := EveryCommonRoute;
+    FullRoute[FinnalCount,0] := FirstOfFinnal;
+    FullRoute[FinnalCount,1] := LastOfFinnal;
+    Inc(FinnalCount);
     end;
   end;
   WriteLn(IntToStr(Count));

@@ -21,7 +21,7 @@ type
 
   public
     // Get all stops and sort them
-    function GetAllStops():int16;
+    procedure GetAllStops();
     // Get all Routes and sort them
     function GetAllRoutes():int16;
     // Get all RouteStops which are linked to a
@@ -45,7 +45,7 @@ begin
   SQLite3Connection1.DatabaseName := 'PAT_5';
 end;
 
-function TDataBase.GetAllStops(): int16;
+procedure TDataBase.GetAllStops();
 begin
   // Order by so the query is sorted for when we read it into arrays so
   //       The data is preped for a binary search.

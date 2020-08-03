@@ -8,7 +8,8 @@ uses
   {$ENDIF}{$ENDIF}
   Interfaces, // this includes the LCL widgetset
   Forms, runtimetypeinfocontrols, Main, Purcase_form, Admin_interface,
-  Data_Connection, Admin_edit, Admin_edit_add_stop, Custom_Classes, Engine;
+  Data_Connection, Admin_edit, Admin_edit_add_stop, Custom_Classes, Engine,
+  EngineInterface;
 
 {$R *.res}
 
@@ -22,7 +23,6 @@ begin
   Application.CreateForm(TForm3, Form3);
   Application.CreateForm(TForm4, Form4);
   Application.CreateForm(TForm5, Form5);
-  Engine.Init();
   Application.Run;
 end.
 

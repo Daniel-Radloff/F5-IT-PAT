@@ -23,6 +23,8 @@ type
     btnHelp: TButton;
     btnExit: TButton;
     btnSearch: TButton;
+    btnSwitch: TButton;
+    btnStartExit: TButton;
     DBGrid1: TDBGrid;
     edtFilter: TEdit;
     GroupBox1: TGroupBox;
@@ -32,6 +34,9 @@ type
     lblFilter: TLabel;
     Memo1: TMemo;
     Memo2: TMemo;
+    memInfo1: TMemo;
+    memInfo2: TMemo;
+    pnlStartInfo: TPanel;
     pnlHelp: TPanel;
   private
 

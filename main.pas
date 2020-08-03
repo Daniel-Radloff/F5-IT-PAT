@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, FileCtrl, Menus,
   ComboEx, StdCtrls, ExtCtrls, EditBtn, Buttons, RTTICtrls, Engine,
-  Custom_Classes;
+  Custom_Classes, EngineInterface;
 
 type
 
@@ -31,6 +31,8 @@ type
     StaticText1: TStaticText;
     tedtStart: TTimeEdit;
     tedtEnd: TTimeEdit;
+    procedure btnOtherClick(Sender: TObject);
+    procedure btnShowHintsClick(Sender: TObject);
     procedure FormActivate(Sender: TObject);
   private
 
@@ -40,6 +42,7 @@ type
 
 var
   Form1: TForm1;
+  test: pAPpEngine;
 
 implementation
 
@@ -49,11 +52,26 @@ implementation
 
 procedure TForm1.FormActivate(Sender: TObject);
 var
-		  x: pStopArray;
-		  y: BusStop;
+  x: Integer;
+  a: pAppEngine;
 begin
-  x := Engine.MainEngine.GiveStopsArr();
-  y := x^[1];
+  //test := EngineInterface.Engine();
+  x := 1;
+end;
+
+procedure TForm1.btnOtherClick(Sender: TObject);
+var
+  routes: pBusRouteArr;
+  x: FullRouteArr;
+begin
+  routes := test^.GiveRoutesArr();
+  x := test^.GetRoute('2b32bf','e82700',660,800);
+  test^.AdminAddToRoute(routes[3],2,True);
+end;
+
+procedure TForm1.btnShowHintsClick(Sender: TObject);
+begin
+  test := EngineInterface.Engine();
 end;
 
 end.

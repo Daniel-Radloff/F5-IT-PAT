@@ -22,6 +22,8 @@ type
     btnUndo: TButton;
     btnConfirm: TButton;
     btnNewStop: TButton;
+    btnGenLin: TButton;
+    btnGenRotation: TButton;
     edtRoute: TEdit;
     GroupBox1: TGroupBox;
     gbxStops: TGroupBox;
