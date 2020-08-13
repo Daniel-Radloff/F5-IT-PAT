@@ -29,6 +29,7 @@ type
     //     sanity and little proccesing power
     //     we have left
     function GetRouteStops(route:BusRoute):int16;
+    function StopCount():integer;
   end;
 
 var
@@ -49,6 +50,7 @@ procedure TDataBase.GetAllStops();
 begin
   // Order by so the query is sorted for when we read it into arrays so
   //       The data is preped for a binary search.
+  SQLQuery1.Close;
   SQLQuery1.SQL.Text := 'Select * from BusStopTBL order by BusStopID';
   SQLQuery1.Open;
 end;
@@ -67,6 +69,14 @@ begin
   SQLQuery1.SQL.Text := 'SELECT * from RouteStopsTBL WHERE RouteID = ' +
                      QuotedStr(route.GetID) + ' ORDER BY RouteID';
   SQLQuery1.Open;
+end;
+
+function TDataBase.StopCount(): integer;
+begin
+  SQLQuery1.Close;
+  SQLQuery1.SQL.Text := 'select COUNT(*) FROM BusStopTbl';
+  SQLQuery1.Open;
+  Result := SQLQuery1.Fields[0].AsInteger;
 end;
 
 end.

@@ -1,29 +1,28 @@
 object DataBase: TDataBase
   OnCreate = DataModuleCreate
   OldCreateOrder = False
-  Height = 147
-  HorizontalOffset = 787
-  VerticalOffset = 245
-  Width = 147
-  PPI = 94
+  Height = 150
+  HorizontalOffset = 804
+  VerticalOffset = 250
+  Width = 150
   object SQLite3Connection1: TSQLite3Connection
     Connected = False
     LoginPrompt = False
     DatabaseName = '/home/daniel/Documents/Programming/Delphi/F5-IT-PAT/PAT_5'
     KeepConnection = False
     Transaction = SQLTransaction1
-    left = 71
-    top = 46
+    AlwaysUseBigint = False
+    Left = 73
+    Top = 47
   end
   object SQLTransaction1: TSQLTransaction
     Active = False
     Database = SQLite3Connection1
-    left = 8
-    top = 94
+    Left = 8
+    Top = 96
   end
   object SQLQuery1: TSQLQuery
     PacketRecords = 1
-    UniDirectional = True
     FieldDefs = <>
     Database = SQLite3Connection1
     Transaction = SQLTransaction1
@@ -31,11 +30,11 @@ object DataBase: TDataBase
       'Select * from BusStopTBL;'
     )
     Params = <>
-    left = 18
-    top = 28
+    Left = 18
+    Top = 29
   end
   object DataSource1: TDataSource
     DataSet = SQLQuery1
-    left = 78
+    Left = 80
   end
 end

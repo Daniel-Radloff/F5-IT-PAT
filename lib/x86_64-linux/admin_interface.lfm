@@ -1,54 +1,58 @@
 object Form3: TForm3
-  Left = 275
-  Height = 413
-  Top = 278
-  Width = 819
+  Left = 513
+  Height = 422
+  Top = 276
+  Width = 836
   Caption = 'Form3'
-  ClientHeight = 413
-  ClientWidth = 819
-  DesignTimePPI = 94
-  LCLVersion = '2.0.8.0'
+  ClientHeight = 422
+  ClientWidth = 836
+  OnActivate = FormActivate
+  LCLVersion = '2.0.10.0'
   object GroupBox1: TGroupBox
     Left = 16
-    Height = 384
+    Height = 392
     Top = 16
-    Width = 208
-    ClientHeight = 382
-    ClientWidth = 206
+    Width = 212
+    ClientHeight = 390
+    ClientWidth = 210
+    Enabled = False
     ParentFont = False
     TabOrder = 0
     object btnAdd: TButton
       Left = 8
-      Height = 56
-      Top = 216
-      Width = 186
+      Height = 57
+      Top = 221
+      Width = 190
       Caption = 'Add New Route'
+      OnClick = btnAddClick
       ParentFont = False
       TabOrder = 0
     end
     object btnDelete: TButton
-      Left = 24
-      Height = 32
-      Top = 280
-      Width = 152
+      Left = 25
+      Height = 33
+      Top = 286
+      Width = 155
       Caption = 'Delete Route'
+      OnClick = btnDeleteClick
       ParentFont = False
       TabOrder = 1
     end
     object btnModify: TButton
       Left = 8
-      Height = 56
-      Top = 320
-      Width = 186
+      Height = 57
+      Top = 327
+      Width = 190
       Caption = 'Modify Route'
+      OnClick = btnModifyClick
       ParentFont = False
       TabOrder = 2
     end
     object Memo2: TMemo
       Left = 8
-      Height = 120
+      Height = 123
       Top = 8
-      Width = 186
+      Width = 190
       Lines.Strings = (
         'WARNING!!!:'
         'This section of the program modifys the data base and gives you the potential to destory existing routes, please use with causion.'
@@ -63,27 +67,27 @@ object Form3: TForm3
     end
     object pnlHelp: TPanel
       Left = 10
-      Height = 73
-      Top = 136
-      Width = 182
-      ClientHeight = 73
-      ClientWidth = 182
+      Height = 75
+      Top = 139
+      Width = 186
+      ClientHeight = 75
+      ClientWidth = 186
       ParentFont = False
       TabOrder = 4
       object btnHints: TButton
         Left = 8
-        Height = 56
+        Height = 57
         Top = 8
-        Width = 73
+        Width = 75
         Caption = 'Show Hints'
         ParentFont = False
         TabOrder = 0
       end
       object btnHelp: TButton
-        Left = 96
-        Height = 56
+        Left = 98
+        Height = 57
         Top = 8
-        Width = 73
+        Width = 75
         Caption = 'Help'
         ParentFont = False
         TabOrder = 1
@@ -91,79 +95,83 @@ object Form3: TForm3
     end
   end
   object GroupBox2: TGroupBox
-    Left = 232
-    Height = 372
+    Left = 237
+    Height = 380
     Top = 20
-    Width = 408
-    ClientHeight = 370
-    ClientWidth = 406
+    Width = 417
+    ClientHeight = 378
+    ClientWidth = 415
+    Enabled = False
     ParentFont = False
     TabOrder = 1
     object DBGrid1: TDBGrid
       Left = 8
-      Height = 312
-      Top = 48
-      Width = 392
+      Height = 319
+      Top = 49
+      Width = 400
       Color = clWindow
       Columns = <>
       DataSource = DataBase.DataSource1
-      Options = [dgEditing, dgTitles, dgIndicator, dgColumnResize, dgColumnMove, dgColLines, dgRowLines, dgTabs, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgDisplayMemoText]
+      Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgAutoSizeColumns, dgDisplayMemoText]
       ParentFont = False
       TabOrder = 0
     end
     object lblFilter: TLabel
-      Left = 48
-      Height = 14
+      Left = 49
+      Height = 15
       Top = 18
-      Width = 31
+      Width = 35
       Caption = 'Filter:'
       ParentColor = False
       ParentFont = False
     end
     object edtFilter: TEdit
       Left = 88
-      Height = 27
-      Top = 13
-      Width = 192
+      Height = 36
+      Top = 8
+      Width = 196
       ParentFont = False
       TabOrder = 1
       Text = 'Filter data'
     end
     object btnSearch: TButton
-      Left = 296
-      Height = 25
+      Left = 302
+      Height = 26
       Top = 14
-      Width = 96
+      Width = 98
       Caption = 'Search'
+      OnClick = btnSearchClick
       ParentFont = False
       TabOrder = 2
     end
     object btnSwitch: TButton
       Left = 6
-      Height = 24
+      Height = 25
       Top = 13
-      Width = 34
+      Width = 35
       Caption = 'Switch'
       Font.Height = -10
       Font.Name = 'Sans'
+      OnClick = btnSwitchClick
       ParentFont = False
       TabOrder = 3
     end
   end
   object GroupBox3: TGroupBox
-    Left = 648
-    Height = 240
+    Left = 662
+    Height = 245
     Top = 16
-    Width = 160
-    ClientHeight = 238
-    ClientWidth = 158
+    Width = 163
+    ClientHeight = 243
+    ClientWidth = 161
+    Enabled = False
     ParentFont = False
     TabOrder = 2
     object Memo1: TMemo
       Left = 8
-      Height = 224
+      Height = 229
       Top = 8
-      Width = 143
+      Width = 146
       Lines.Strings = (
         'List of current transactions:'
       )
@@ -173,101 +181,107 @@ object Form3: TForm3
     end
   end
   object GroupBox4: TGroupBox
-    Left = 648
-    Height = 136
-    Top = 264
-    Width = 160
-    ClientHeight = 134
-    ClientWidth = 158
+    Left = 662
+    Height = 139
+    Top = 270
+    Width = 163
+    ClientHeight = 137
+    ClientWidth = 161
+    Enabled = False
     ParentFont = False
     TabOrder = 3
     object btnEdit: TButton
       Left = 8
-      Height = 24
+      Height = 25
       Top = 16
-      Width = 143
+      Width = 146
       Caption = 'Remove Change'
       ParentFont = False
       TabOrder = 0
     end
     object btnReset: TButton
-      Left = 64
-      Height = 24
-      Top = 48
-      Width = 81
+      Left = 65
+      Height = 25
+      Top = 49
+      Width = 83
       Caption = 'Reset'
       ParentFont = False
       TabOrder = 1
     end
     object btnComit: TButton
       Left = 8
-      Height = 48
-      Top = 80
-      Width = 143
+      Height = 49
+      Top = 82
+      Width = 146
       Caption = 'Comit Changes'
       ParentFont = False
       TabOrder = 2
     end
     object btnExit: TButton
       Left = 16
-      Height = 24
-      Top = 48
-      Width = 41
+      Height = 25
+      Top = 49
+      Width = 42
       Caption = 'Exit'
+      OnClick = btnExitClick
       ParentFont = False
       TabOrder = 3
     end
   end
   object pnlStartInfo: TPanel
     Left = 184
-    Height = 200
-    Top = 48
-    Width = 480
-    ClientHeight = 200
-    ClientWidth = 480
-    Enabled = False
+    Height = 204
+    Top = 88
+    Width = 490
+    ClientHeight = 204
+    ClientWidth = 490
+    ParentFont = False
     TabOrder = 4
-    Visible = False
     object btnStartExit: TButton
-      Left = 400
-      Height = 24
-      Top = 160
-      Width = 73
+      Left = 409
+      Height = 25
+      Top = 163
+      Width = 75
       Caption = 'Ok'
+      OnClick = btnStartExitClick
+      ParentFont = False
       TabOrder = 0
     end
     object memInfo1: TMemo
       Left = 8
-      Height = 184
+      Height = 188
       Top = 8
-      Width = 147
+      Width = 150
       Lines.Strings = (
         'Hello'
         'To delete or modify routes, select a route on the table and click the apropriate button.'
         'Please note that this can cause issues and for this reason I created a special route that you can delete however feel free to do what you want.'
       )
+      ParentFont = False
       TabOrder = 1
     end
     object memInfo2: TMemo
-      Left = 160
-      Height = 184
+      Left = 163
+      Height = 188
       Top = 8
-      Width = 147
+      Width = 150
       Lines.Strings = (
         'Other parts of this system are pretty simple and will allow you to add, remove and modify existing or new stops within routes.'
         'Please note that this will have a impact on what paths the algorythim can find and the total time between routes.'
       )
+      ParentFont = False
       TabOrder = 2
     end
     object memInfo3: TMemo
-      Left = 312
-      Height = 136
+      Left = 319
+      Height = 139
       Top = 8
-      Width = 147
+      Width = 150
       Lines.Strings = (
         'If you do cause ireprable damage to the database, I have included a copy which you can simply rename to "PAT_5" after deleting the main database.'
         'Have Fun :)'
       )
+      ParentFont = False
       TabOrder = 3
     end
   end

@@ -1,94 +1,116 @@
 object Form4: TForm4
-  Left = 763
-  Height = 407
-  Top = 258
-  Width = 339
+  Left = 761
+  Height = 416
+  Top = 256
+  Width = 346
   Caption = 'Form4'
-  ClientHeight = 407
-  ClientWidth = 339
-  DesignTimePPI = 94
-  LCLVersion = '2.0.8.0'
+  ClientHeight = 416
+  ClientWidth = 346
+  LCLVersion = '2.0.10.0'
   object GroupBox1: TGroupBox
     Left = 8
-    Height = 111
+    Height = 113
     Top = 8
-    Width = 323
-    ClientHeight = 109
-    ClientWidth = 321
+    Width = 330
+    ClientHeight = 111
+    ClientWidth = 328
+    ParentFont = False
     TabOrder = 0
     object edtRoute: TEdit
-      Left = 48
-      Height = 27
+      Left = 49
+      Height = 36
       Top = 8
-      Width = 133
+      Width = 136
+      ParentFont = False
       TabOrder = 0
       Text = 'Route Name'
     end
-    object ListBox1: TListBox
-      Left = 16
-      Height = 64
-      Top = 40
-      Width = 162
-      Font.Height = -10
-      Font.Name = 'Sans'
-      Items.Strings = (
-        'Matched'
-        'Routes'
-        'Here'
-      )
-      ItemHeight = 18
-      ItemIndex = 0
-      ParentFont = False
-      ScrollWidth = 147
-      TabOrder = 1
-    end
     object Label1: TLabel
       Left = 9
-      Height = 14
+      Height = 15
       Top = 14
-      Width = 35
+      Width = 39
       Caption = 'Name:'
       ParentColor = False
+      ParentFont = False
     end
     object Panel1: TPanel
-      Left = 195
-      Height = 82
+      Left = 199
+      Height = 84
       Top = 16
-      Width = 118
-      ClientHeight = 82
-      ClientWidth = 118
-      TabOrder = 2
+      Width = 121
+      ClientHeight = 84
+      ClientWidth = 121
+      ParentFont = False
+      TabOrder = 1
       object btnHints: TButton
         Left = 16
-        Height = 26
+        Height = 27
         Top = 8
-        Width = 82
+        Width = 84
         Caption = 'Show Hints'
+        ParentFont = False
         TabOrder = 0
       end
       object btnHelp: TButton
         Left = 16
-        Height = 25
-        Top = 49
-        Width = 82
+        Height = 26
+        Top = 50
+        Width = 84
         Caption = 'Help'
+        ParentFont = False
         TabOrder = 1
       end
+    end
+    object edtStartTime: TEdit
+      Left = 8
+      Height = 36
+      Top = 64
+      Width = 80
+      TabOrder = 2
+      Text = 'edtStartTime'
+    end
+    object edtEndTime: TEdit
+      Left = 105
+      Height = 36
+      Top = 64
+      Width = 80
+      TabOrder = 3
+      Text = 'edtEndTime'
+    end
+    object Label2: TLabel
+      Left = 16
+      Height = 15
+      Top = 48
+      Width = 65
+      Caption = 'Start Time:'
+      ParentColor = False
+    end
+    object Label3: TLabel
+      Left = 112
+      Height = 15
+      Top = 48
+      Width = 60
+      Caption = 'End Time:'
+      ParentColor = False
     end
   end
   object gbxStops: TGroupBox
     Left = 14
-    Height = 264
-    Top = 128
-    Width = 218
-    ClientHeight = 262
-    ClientWidth = 216
+    Height = 270
+    Top = 131
+    Width = 223
+    ClientHeight = 268
+    ClientWidth = 221
+    ParentFont = False
     TabOrder = 1
     object ListBox2: TListBox
       Left = 3
-      Height = 246
+      Height = 251
       Top = 8
-      Width = 125
+      Width = 128
+      Font.Height = -12
+      Font.Name = 'Sans'
       Items.Strings = (
         'Stops'
         'in'
@@ -97,115 +119,132 @@ object Form4: TForm4
       )
       ItemHeight = 22
       ItemIndex = 0
-      ScrollWidth = 123
+      ParentFont = False
+      ScrollWidth = 126
       TabOrder = 0
     end
     object btnRemove: TButton
-      Left = 136
-      Height = 24
-      Top = 40
-      Width = 73
+      Left = 139
+      Height = 25
+      Top = 41
+      Width = 75
       Caption = 'Remove'
+      ParentFont = False
       TabOrder = 1
     end
     object btnInsert: TButton
-      Left = 136
-      Height = 24
-      Top = 72
-      Width = 73
+      Left = 139
+      Height = 25
+      Top = 74
+      Width = 75
       Caption = 'Insert'
+      ParentFont = False
       TabOrder = 2
     end
     object btnAppend: TButton
-      Left = 136
-      Height = 24
-      Top = 105
-      Width = 73
+      Left = 139
+      Height = 25
+      Top = 107
+      Width = 75
       Caption = 'Append'
+      ParentFont = False
       TabOrder = 3
     end
     object btnModify: TButton
-      Left = 136
-      Height = 24
-      Top = 136
-      Width = 73
+      Left = 139
+      Height = 25
+      Top = 139
+      Width = 75
       Caption = 'Modify'
+      ParentFont = False
       TabOrder = 4
     end
     object btnUndo: TButton
-      Left = 136
-      Height = 24
-      Top = 168
-      Width = 73
+      Left = 139
+      Height = 25
+      Top = 172
+      Width = 75
       Caption = 'Undo'
+      ParentFont = False
       TabOrder = 5
     end
     object btnNewStop: TButton
-      Left = 136
-      Height = 24
+      Left = 139
+      Height = 25
       Top = 8
-      Width = 73
+      Width = 75
       Caption = 'New Stop'
+      ParentFont = False
       TabOrder = 6
     end
     object btnGenLin: TButton
-      Left = 136
-      Height = 24
-      Top = 198
-      Width = 73
-      Caption = 'btnGenLin'
+      Left = 139
+      Height = 25
+      Top = 202
+      Width = 75
+      Caption = 'Make Linear'
+      ParentFont = False
       TabOrder = 7
     end
     object btnGenRotation: TButton
-      Left = 136
-      Height = 24
-      Top = 230
-      Width = 73
-      Caption = 'btnGenRotation'
+      Left = 139
+      Height = 25
+      Top = 235
+      Width = 75
+      Caption = 'Make Rotation'
+      Font.Height = -10
+      Font.Name = 'Sans'
+      ParentFont = False
       TabOrder = 8
     end
   end
   object gbxChanges: TGroupBox
-    Left = 240
-    Height = 168
-    Top = 128
-    Width = 85
-    ClientHeight = 166
-    ClientWidth = 83
+    Left = 245
+    Height = 172
+    Top = 131
+    Width = 87
+    ClientHeight = 170
+    ClientWidth = 85
+    ParentFont = False
     TabOrder = 2
     object Memo1: TMemo
       Left = 4
-      Height = 155
+      Height = 158
       Top = 5
-      Width = 75
+      Width = 77
       Lines.Strings = (
         'Current Trasactions:'
       )
+      ParentFont = False
       TabOrder = 0
     end
   end
   object gbxConfirm: TGroupBox
-    Left = 240
-    Height = 83
-    Top = 304
-    Width = 91
-    ClientHeight = 81
-    ClientWidth = 89
+    Left = 245
+    Height = 85
+    Top = 310
+    Width = 93
+    ClientHeight = 83
+    ClientWidth = 91
+    ParentFont = False
     TabOrder = 3
     object btnExit: TButton
       Left = 8
-      Height = 24
+      Height = 25
       Top = 8
-      Width = 73
+      Width = 75
       Caption = 'Cancel'
+      OnClick = btnExitClick
+      ParentFont = False
       TabOrder = 0
     end
     object btnConfirm: TButton
       Left = 8
-      Height = 32
-      Top = 40
-      Width = 73
+      Height = 33
+      Top = 41
+      Width = 75
       Caption = 'Confirm'
+      ParentFont = False
       TabOrder = 1
     end
   end

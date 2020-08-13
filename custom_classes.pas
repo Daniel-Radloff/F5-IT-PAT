@@ -56,6 +56,7 @@ type
   end;
   TimeCalcArr = array of TimeCalc;
   IntArr = array of integer;
+  strArr = array of String;
 
 
   { BusStop }
@@ -104,6 +105,7 @@ type
     // Return all with pointer arr. Use True or false to call
     function GetLinkedRoutes(Pointers:Boolean): pBusRouteArr; overload;
     procedure RemoveLinked(Route:pRoute);
+    function getStopTrueName():string;
     destructor Destroy(); override;
     { Public End }
 
@@ -153,6 +155,7 @@ type
     procedure IncPos;
     procedure ChangeLinked(StopPtr:pBusStop);
     procedure ChangeInterval(interval:integer);
+    function GetHID():string;
   public
     destructor Destroy(); override;
 
@@ -191,6 +194,8 @@ type
       function GetStopInterval(Stop:pBusStop; Stop2:pBusStop):TimeCalcArr;
       function GetStopInterval(Stop:pBusStop):IntArr; overload;
       function GetRouteStart: integer;
+      function GetRouteStartStr : string;
+      function GetRouteEndStr : string;
       // Get the full route interval
       function GetFullInterval: integer;
       procedure DeleteStop(POS:integer);
@@ -217,6 +222,10 @@ type
       procedure ChangeName(NewName:string);
       procedure ChangeTimes(StartNew,EndNew:string);
       procedure ChangePrice(NewPrice:real);
+      // Get a arr of strings of stop names and times in route.
+      //     This is for the admin screen and then all manipulations
+      //     use the lbx index because the two are logicaly linked
+      function getStopsInfo():strArr;
 
   end;
    // A array of all routes, used in engine for init,cals and other
@@ -426,9 +435,20 @@ begin
   end;
 end;
 
+function BusRoute.GetRouteStartStr: string;
+begin
+  Result := self.sTimeStart;
+end;
+
+function BusRoute.GetRouteEndStr: string;
+begin
+  Result := self.sTimeEnd;
+end;
+
 function BusRoute.GetFullInterval: integer;
 begin
-  Result := self.arrRouteStops[length(arrRouteStops)-1].GetInterval;
+  if length(self.arrRouteStops) < 1 then writeln('only one');
+  Result := self.arrRouteStops[length(self.arrRouteStops)-1].GetInterval;
 end;
 
 procedure BusRoute.DeleteStop(POS: integer);
@@ -602,6 +622,21 @@ begin
   self.rPrice := NewPrice;
 end;
 
+function BusRoute.getStopsInfo(): strArr;
+var
+  build : strArr;
+  each: RouteStop;
+begin
+  SetLength(build,0);
+  for each in self.arrRouteStops do
+  begin
+  //   Just a temp arr to construct result
+  setLength(build,length(Build)+1);
+  build[length(build)-1] := each.GetHID();
+  end;
+  Result := build;
+end;
+
 { RouteStop }
 
 constructor RouteStop.Create(POS: integer; Stop: pBusStop; TimeInterval: integer
@@ -657,6 +692,11 @@ end;
 procedure RouteStop.ChangeInterval(interval: integer);
 begin
   self.iInterval := interval;
+end;
+
+function RouteStop.GetHID(): string;
+begin
+  Result := self.linkedStop^.GetName + ' ' + self.linkedStop^.getStopTrueName();
 end;
 
 destructor RouteStop.Destroy();
@@ -977,14 +1017,19 @@ var
   count : integer;
 begin
   count := 0;
-  while count < length(self.aClose)-1 do
+  while count <= length(self.aClose)-1 do
   begin
-    if (self.aClose[count] = Route) then
+    if (self.aClose[count]^.GetHID = Route^.GetHID) then
     begin
       self.aClose[count] := self.aClose[length(Self.aClose)-1];
       setlength(Self.aClose, length(self.aClose)-1);
     end;
   end;
+end;
+
+function BusStop.getStopTrueName(): string;
+begin
+  Result := self.sName;
 end;
 
 destructor BusStop.Destroy();

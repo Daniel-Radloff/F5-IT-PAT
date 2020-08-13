@@ -4,10 +4,14 @@ unit EngineInterface;
 
 interface
 
-uses Engine;
+uses Engine, Sysutils;
 type
   pAppEngine = ^APEngine;
-function Engine():pAppEngine;
+function Engine():integer;
+function convTimeToStr(Time:integer):string;
+function convStrToTime(Time:string):integer;
+//       Restarts AppEngine in place
+procedure RestartEngine();
 var MainEngine: APEngine;
 
 implementation
@@ -29,15 +33,38 @@ implementation
 //    Yes it is horrific, I should not have to do this, I don't know why I have
 //    to do this, and I don't want to do this but it seems to be the only way
 //    to get the fucking thing to work.
-function Engine(): pAppEngine;
+function Engine(): integer;
 begin
   if MainEngine = nil then MainEngine := APEngine.Create();
-  Result := @MainEngine;
+  Result := 1;
+end;
+
+function convTimeToStr(Time: integer): string;
+var
+  Minutes, Hours: string;
+begin
+  Minutes := IntToStr(Time mod 60);
+  Hours := IntToStr(Time div 60);
+  if Length(Hours) < 2 then
+     Hours := '0'+Hours;
+  if Length(Minutes) < 2 then
+     Minutes := '0'+Minutes;
+  Result := Hours + ':' + Minutes;
+end;
+
+function convStrToTime(Time: string): integer;
+begin
+
+end;
+
+procedure RestartEngine();
+begin
+  MainEngine.ReStart();
 end;
 
 initialization
 
 finalization
- MainEngine.Destroy;
+ FreeAndNil(MainEngine);
 end.
 

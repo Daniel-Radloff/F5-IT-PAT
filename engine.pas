@@ -5,7 +5,7 @@ unit Engine;
 interface
 
 uses
-  Classes, SysUtils, Custom_Classes, Data_Connection, db, Dialogs, math;
+  Classes, SysUtils, Custom_Classes, Data_Connection, db, math;
 
 type
   FullRouteWithTimes = record
@@ -13,7 +13,14 @@ type
     DepartureTime : integer;
   end;
 
+  FindRoutesInput = record
+    StartStop : pBusStop;
+    EndStop : pBusStop;
+    StartTime : integer;
+    EndTime : integer;
+  end;
 
+  // should make this or the array of FullRoutes an object
   FullRouteArr = array of array of FullRouteWithTimes;
   { APEngine }
   // The engine is the king of this kingdom
@@ -24,11 +31,11 @@ type
   APEngine = class
   private
     BusStops: Custom_Classes.StopArray;
-    pBusStops : pArr;
     AllRoutes : RouteArray;
-    pAllRoutes : pBusRouteArr;
     function GetNewStops(): int16;
   public
+    pBusStops : pArr;
+    pAllRoutes : pBusRouteArr;
     constructor Create(); overload;
     // Change sec prefs when stable
     function InitializeProgram(): int16;
@@ -36,10 +43,13 @@ type
 
     // User End functions
     // Delete when the thing works, this is terrible
-    function GiveStopsArr(): Custom_Classes.pStopArray;
+    function GiveStopsArr(): pArr;
     function GiveRoutesArr(): pBusRouteArr;
+    function GetRoutePtr(sID:string): pRoute;
+    // Find all routes to a location
     function GetRoute(sStart: string; sEnd: string; StartTime: integer;
       EndTime: integer): FullRouteArr;
+    function GetRoute(Input:FindRoutesInput): FullRouteArr; overload;
 
     // Some nice little data base features for the admin screen
 
@@ -80,16 +90,14 @@ type
     procedure AdminModifyRouteTimes(RoutePtr:pRoute;Start,EndTime:string);
     // Modify route Price
     procedure AdminModifyRoutePrice(RoutePtr:pRoute; NewPrice:real);
-
-
     // Use override to not call default
     destructor Destroy; override;
+    // Restart
+    procedure ReStart();
 
 
   end;
 
- var MainEngine: APEngine;
- procedure Init();
  function BinSearchRawR(Field : pBusRouteArr; Search : string): pBusRoute;
  function BinSearchRaw(Field : pArr; Search: string): pBusStop;
  // A blatent copy paste of the other two functions but the most
@@ -98,14 +106,6 @@ type
  function BinCarefullDelPOS(Field : pArr; Search: string): integer;
 
 implementation
-
-procedure Init();
-var
-		  x: Integer;
-begin
-  MainEngine := APEngine.Create();
-  MainEngine.InitializeProgram();
-end;
 
 // I don't know why this isn't part of the engine object but it doesn't matter
 //   and I might still find a use for it later.
@@ -170,11 +170,11 @@ begin
      begin
      // I do this and pray that the compiler takes care of deconstructing the
      //   copys when the function exits,
-     Result := BinSearchRawR(Copy(Field,index),Search);
+     Result := binCarefullDelPOSR(Copy(Field,index),Search);
      end;
   if ID > Search then
      begin
-     Result := BinSearchRawR(Copy(Field,0,index), Search);
+     Result := binCarefullDelPOSR(Copy(Field,0,index), Search);
      end;
 end;
 
@@ -192,9 +192,9 @@ begin
   if ID < Search then
        // I do this and pray that the compiler takes care of deconstructing the
        //   copys when the function exits,
-     Result := BinSearchRaw(Copy(Field,index),Search);
+     Result := BinCarefullDelPOS(Copy(Field,index),Search);
   if ID > Search then
-     Result := BinSearchRaw(Copy(Field,0,index), Search);
+     Result := BinCarefullDelPOS(Copy(Field,0,index), Search);
 end;
 
 { Engine }
@@ -205,22 +205,25 @@ var
   NewRoute, everyRoute: BusRoute;
   RouteIDRaw, linked, test: String;
   arrLinked : array of string;
-  CVCPos, Count: Integer;
+  CVCPos, Count, NumofStops: Integer;
 begin
   with DataBase do Begin
   // Populate data source with all BusStops
+    NumofStops := StopCount();
     GetAllStops();
     setLength(BusStops,0);
     // Create Bus Stops
+    setLength(BusStops,NumofStops);
+    Count := 0;
     while not SQLQuery1.EOF do
     begin
       // Create the new bus Stop
       NewStop := BusStop.Create(SQLQuery1.Fields[3].AsString,
        SQLQuery1.Fields[0].AsString, SQLQuery1.Fields[1].AsString);
        // Increase length of Stops array
-       setlength(BusStops,length(BusStops)+1);
        // Add New stop
-       BusStops[length(BusStops)-1] := NewStop;
+       BusStops[count] := NewStop;
+       inc(Count);
        SQLQuery1.Next();
     end;
     // this is idiotic as a array is inherently a list of pointers so a raw
@@ -228,7 +231,7 @@ begin
     setLength(pBusStops, Length(BusStops));
     for Count := 0 to length(BusStops) do
     begin
-      pBusStops[Count] := @BusStops[Count];
+      pBusStops[Count] := @(BusStops[Count]);
     end;
 
 
@@ -267,7 +270,7 @@ begin
     setlength(pAllRoutes, length(AllRoutes));
     for Count := 0 to length(pAllRoutes) do
     begin
-      pAllRoutes[Count] := @AllRoutes[Count];
+      pAllRoutes[Count] := @(AllRoutes[Count]);
     end;
 
     // Get all Stops
@@ -304,7 +307,12 @@ begin
       SetLength(arrLinked, length(arrLinked)+1);
       // add item
       arrLinked[length(arrLinked)-1] := RouteIDRaw;
-
+      if arrLinked[0] = '' then
+         begin
+         Inc(Count);
+         SQLQuery1.Next();
+         Continue;
+         end;
       // Search and link routes properly
       for linked in arrLinked do
       begin
@@ -380,14 +388,20 @@ begin
   Result := length(self.BusStops);
 end;
 
-function APEngine.GiveStopsArr(): Custom_Classes.pStopArray;
+function APEngine.GiveStopsArr(): pArr;
 begin
-  Result := @self.BusStops;
+  Result := copy(self.pBusStops);
 end;
 
 function APEngine.GiveRoutesArr(): pBusRouteArr;
 begin
   Result := self.pAllRoutes;
+end;
+
+function APEngine.GetRoutePtr(sID: string): pRoute;
+begin
+  // Easy peasy
+  Result := BinSearchRawR(self.pAllRoutes,sID);
 end;
 
 function APEngine.GetRoute(sStart: string; sEnd: string; StartTime: integer;
@@ -422,6 +436,7 @@ begin
     tStartTime := StartTime;
     while count < length(Route)-1 do
     begin
+      writeln(Route[count].Route^.GetHID);
       RouteStartTime := Route[count].Route^.GetRouteStart;
       // Get next interval
       FullInterval := Route[Count].Route^.GetFullInterval;
@@ -530,6 +545,148 @@ begin
   Result := FullCalculatedRoute;
 end;
 
+function APEngine.GetRoute(Input: FindRoutesInput): FullRouteArr;
+var
+  pbStart, pbEnd: pBusStop;
+  ViableRoutes: RouteIntesecArr;
+  Route: arrStopRouteLink;
+  FullCalculatedRoute : FullRouteArr;
+  TempFullRoute : FullRouteWithTimes;
+  Intervals , ArrivalInterval, NewRouteIntervals: TimeCalcArr;
+  tStartTime, RouteStartTime, count, FullInterval,
+    TotalCount, Iinterval, BusArrival, LoopCount: Integer;
+  Interval: IntArr;
+  TempStopRoute : StopRouteLink;
+begin
+  // Get Stops to look for
+  // just use index cause we know it
+  pbStart := Input.StartStop;
+  pbEnd := Input.EndStop;
+  ViableRoutes := pbStart^.FindRouteInit(pbEnd,pbStart);
+
+  // Great. Now look for times that link closely with the route
+  // Keeps track for FullCalculatedRoute array
+  TotalCount := -1;
+  SetLength(FullCalculatedRoute,length(ViableRoutes));
+  tStartTime := Input.StartTime;
+  For Route in ViableRoutes do
+  begin
+    // A Route is a group of Intersections that lead onto different routes
+    count := 0;
+    Inc(TotalCount);
+    tStartTime := Input.StartTime;
+    while count < length(Route)-1 do
+    begin
+      writeln(Route[count].Route^.GetHID);
+      RouteStartTime := Route[count].Route^.GetRouteStart;
+      // Get next interval
+      FullInterval := Route[Count].Route^.GetFullInterval;
+      // Calculate Closest Time that we depart at for default
+      // case is much faster than a if because of how it is compiled and
+      //      executed at runtime. Kindof works like a hash table so it will
+      //      imediatly jump to the else statement without comparing our
+      //      count var.
+      case count of
+      0 :
+        begin
+          //       BIG BRAIN NOTE!!!!!!!!!!!!!!!!!!!!!!
+          //       IF its a walk r then we don't need to calcute a time,
+                   // just use the given start time since we are already there
+          //       and then modify second step to fit our calcs
+
+          // We do this for first stop because we can either arrive before
+          //    Specifyed time or after
+          Interval := route[0].Route^.GetStopInterval(Route[0].Stop);
+          while (RouteStartTime + FullInterval + interval[0]) < tStartTime do
+          begin
+               interval[0] := interval[0] + FullInterval;
+          end;
+          if (interval[0] + FullInterval)-Input.StartTime <
+             abs(interval[0] - Input.StartTime) then
+             interval[0] := interval[0] + FullInterval;
+          // NOTE::!!!!
+          //             Start Time should be included in time calc ie
+          //             Before loop start
+          //             we also need to check the second option
+          //             if there is one
+          Iinterval := interval[0] + RouteStartTime;
+            // Inc Length
+          setLength(FullCalculatedRoute[Totalcount],count+1);
+          // Assign Vals
+          TempStopRoute.Stop := Route[count].Stop;
+          TempStopRoute.Route := Route[count].Route;
+          TempFullRoute.RouteAndStop := TempStopRoute;
+          TempFullRoute.DepartureTime := Iinterval;
+          // Assign to arr
+          FullCalculatedRoute[TotalCount,count] := TempFullRoute;
+          Inc(Count);
+          tStartTime := Iinterval;
+          Continue;
+        end;
+
+      else
+        begin
+          // Get some values by using patterns to know what values we can use
+          ArrivalInterval := Route[count-1].Route^.GetStopInterval(
+                        Route[count-1].Stop, Route[count].Stop);
+          //        Calc when bus will arrive
+          BusArrival := (ArrivalInterval[1].interval -
+                   ArrivalInterval[0].interval) + tStartTime;
+          //         Get Stop arrival intervals for new route
+          // cant tell if >= matters because of loop condition but better safe
+          //      than access violation. If len 2 then loop I think loop will
+          //      catch it but im not 100% sure
+          //
+          { TODO : add when we need to get off and wait for next bus }
+          if count >= length(route)-1 then
+             break;
+          // Do you even understand how much pain it took to get to this point?
+          //    I cant be botherd to write another overloaded function that
+          //    returns a more clean result at this moment. I'll kill
+          //    myself if I have to do that again.
+          NewRouteIntervals := Route[count+1].Route^.GetStopInterval(Route[count].Stop
+                      ,Route[count+1].Stop);
+            // We need to be at the stop before the bus is so we go till
+            //    we go over and then add that full interval after the loop
+          while RouteStartTime + FullInterval + NewRouteIntervals[0].interval
+                < BusArrival do
+          begin
+            NewRouteIntervals[0].interval := NewRouteIntervals[0].interval +
+                                          FullInterval;
+          end;
+          NewRouteIntervals[0].interval := NewRouteIntervals[0].interval +
+                                        FullInterval;
+          // Assign to out Iinterval value and add new route data
+          Iinterval := NewRouteIntervals[0].interval + RouteStartTime;
+        end;
+      end;
+      // Inc Length
+      setLength(FullCalculatedRoute[Totalcount],count+1);
+      // Assign Vals
+      TempStopRoute.Stop := Route[count].Stop;
+      TempStopRoute.Route := Route[count+1].Route;
+      TempFullRoute.RouteAndStop := TempStopRoute;
+      TempFullRoute.DepartureTime := Iinterval;
+      // Assign to arr
+      FullCalculatedRoute[TotalCount,count] := TempFullRoute;
+      Inc(Count);
+      tStartTime := Iinterval;
+    end;
+    NewRouteIntervals := Route[count].Route^.GetStopInterval(Route[count-1].Stop
+                      ,Route[count].Stop);
+    // Inc Length
+    setLength(FullCalculatedRoute[Totalcount],count+1);
+    // Assign Vals
+    TempFullRoute.RouteAndStop := Route[Count];
+    TempFullRoute.DepartureTime := Iinterval + NewRouteIntervals[1].interval;
+    // Assign to arr
+    FullCalculatedRoute[TotalCount,count] := TempFullRoute;
+    Inc(Count);
+    tStartTime := Iinterval;
+  end;
+  Result := FullCalculatedRoute;
+end;
+
 procedure APEngine.AdminShowTbl(param: string);
 begin
   UpperCase(param);
@@ -538,12 +695,14 @@ begin
     case param of
     'B' :
       begin
+        SQLQuery1.Close;
         SQLQuery1.SQL.Clear;
         SQLQuery1.SQL.Text := 'SELECT * FROM BusStopTBL';
         SQLQuery1.Open;
       end;
     'R' :
       begin
+        SQLQuery1.Close;
         SQLQuery1.SQL.Clear;
         SQLQuery1.SQL.Text := 'SELECT * FROM RoutesTBL';
         SQLQuery1.Open;
@@ -606,6 +765,7 @@ var
   AffectedRoutes: pArr;
   Affected: pBusStop;
   count: Integer;
+  tempPtrArr: pBusRouteArr;
 begin
   // I knew this was worth doing properly hahahahahahahahhaha I just saved
   //   myself from so much pain
@@ -622,13 +782,13 @@ begin
     SQLQuery1.Clear;
     SQLQuery1.SQL.Text := 'DELETE FROM RouteStopsTbl WHERE RouteID = ' +
                        QuotedStr(Route^.GetID);
-    SQLQuery1.Open;
+    SQLQuery1.ExecSQL;
 
     SQLQuery1.Close;
     SQLQuery1.Clear;
     SQLQuery1.SQL.Text := 'DELETE FROM RoutesTbl Where RouteID = ' +
                           QuotedStr(Route^.GetID);
-    SQLQuery1.Open;
+    SQLQuery1.ExecSQL;
 
     AffectedRoutes := Route^.ClearRoute();
     for Affected in AffectedRoutes do
@@ -638,8 +798,10 @@ begin
       SQLQuery1.SQL.Text := 'UPDATE BusStopTbl SET Close = ' +
                             QuotedStr(Affected^.GetLinkedRoutes) +
                             ' WHERE BusStopID = ' + QuotedStr(Affected^.GetID);
-      SQLQuery1.Open;
+      SQLQuery1.ExecSQL;
     end;
+    // FreePascal nonsense
+    SQLQuery1.Close;
   end;
   // Now we must Null and destroy the pointer and objects and remove them from
   //     our lists
@@ -651,19 +813,23 @@ begin
     inc(count);
   end;
 
-  // If found, Which it will be, go through and delete it.
+  // If found (Which it will be)... go through and delete it.
   Route^.Destroy();
   Route := Nil;
   if count < length(self.pAllRoutes) then
   begin
      while count < length(self.pAllRoutes)-1 do
      begin
-       self.pAllRoutes[count] := self.pAllRoutes[count+1];
        self.AllRoutes[count] := self.AllRoutes[count+1];
+       inc(count);
      end;
   end;
-  setlength(self.pAllRoutes,length(self.pAllRoutes)-1);
+  self.pAllRoutes[length(self.pAllRoutes)-1] := nil;
   setlength(self.AllRoutes, length(self.AllRoutes)-1);
+  self.pAllRoutes[length(self.AllRoutes)] := nil;
+  DataBase.SQLTransaction1.Commit;
+  Affected := nil;
+  AffectedRoutes := nil;
 end;
 
 procedure APEngine.AdminDeleteStop(StopPtr: pBusStop);
@@ -704,7 +870,7 @@ begin
   DeletePOS := BinCarefullDelPOS(self.pBusStops,StopPtr^.GetID);
   self.pBusStops[DeletePOS] := nil;
   self.BusStops[DeletePOS].Destroy();
-  while DeletePOS < length(Self.pBusStops) do
+  while DeletePOS < length(Self.BusStops) do
   begin
     self.pBusStops[DeletePOS] := self.pBusStops[DeletePOS+1];
     self.BusStops[DeletePOS] := self.BusStops[DeletePOS+1];
@@ -727,10 +893,8 @@ procedure APEngine.AdminAddToRoute(RoutePtr: pRoute; SelectedPOS: integer;
 var
   count : integer;
 begin
-  // This should not be a switch but whatever
-  case Append of
-  False : Dec(SelectedPOS);
-  end;
+  // This should not be a switch but whatever ---> fixed it. Its now a if.
+  if Append = False then Dec(SelectedPOS);
   // I should have improved how the selected position is handled but
   //  that would just be a mess to change at this point and it
   //  is already working just fine with out any performance implications.
@@ -757,8 +921,8 @@ begin
     SQLQuery1.Close;
     // Inserts new data
     // Please note that this table is beyond human comprehension and
-    //        is not possible to understand. The program handles everything
-    //        for us and it mearly serves to reduce redundency;
+    //        is not possible to easyly understand. The program handles
+    //        everything for us and it mearly serves to reduce repetitive data;
     SQLQuery1.SQL.Text := 'INSERT INTO RouteStopsTbl VALUES(' +
                        QuotedStr(RoutePtr^.GetID) + ',' + IntToStr(
                        SelectedPOS+1) + ',' + QuotedStr(StopPtr^.GetID) +
@@ -941,15 +1105,46 @@ begin
     Self.pAllRoutes[count] := nil;
     inc(count);
   end;
-  setLength(self.pAllRoutes,0);
+  Delete(pAllRoutes,0,length(pAllRoutes));
   count := 0;
   while count < length(self.pBusStops) do
   begin
     self.pBusStops[count] := nil;
     inc(count);
   end;
-  setLEngth(self.pBusStops,0);
+  self.pBusStops := nil;
   inherited;
+end;
+
+procedure APEngine.ReStart();
+var
+  count: Integer;
+begin
+  count := 0;
+  While count < length(self.BusStops) do
+  begin
+    FreeAndNil(self.BusStops[count]);
+    inc(Count)
+  end;
+  count := 0;
+  While  count < length(self.AllRoutes) do
+  begin
+    FreeAndNil(self.AllRoutes[count]);
+    inc(count);
+  end;
+  count := 0;
+  while count < length(self.pAllRoutes) do
+  begin
+    Self.pAllRoutes[count] := nil;
+    inc(count);
+  end;
+  count := 0;
+  while count < length(self.pBusStops) do
+  begin
+    self.pBusStops[count] := nil;
+    inc(count);
+  end;
+  self.GetNewStops();
 end;
 
 end.
