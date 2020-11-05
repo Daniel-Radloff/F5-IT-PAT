@@ -21,31 +21,40 @@ object Form3: TForm3
     object btnAdd: TButton
       Left = 8
       Height = 57
+      Hint = 'Adds an item'
       Top = 221
       Width = 190
       Caption = 'Add New Route'
       OnClick = btnAddClick
       ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 0
     end
     object btnDelete: TButton
       Left = 25
       Height = 33
+      Hint = 'Deletes a Item'
       Top = 286
       Width = 155
       Caption = 'Delete Route'
       OnClick = btnDeleteClick
       ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 1
     end
     object btnModify: TButton
       Left = 8
       Height = 57
+      Hint = 'Modifys a route'
       Top = 327
       Width = 190
       Caption = 'Modify Route'
       OnClick = btnModifyClick
       ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 2
     end
     object Memo2: TMemo
@@ -62,6 +71,7 @@ object Form3: TForm3
         'If you need help please use the help buttons.'
       )
       ParentFont = False
+      ReadOnly = True
       ScrollBars = ssAutoVertical
       TabOrder = 3
     end
@@ -77,30 +87,38 @@ object Form3: TForm3
       object btnHints: TButton
         Left = 8
         Height = 57
+        Hint = 'Show Map'
         Top = 8
         Width = 75
-        Caption = 'Show Hints'
+        Caption = 'Show Map'
+        OnClick = btnHintsClick
         ParentFont = False
+        ParentShowHint = False
+        ShowHint = True
         TabOrder = 0
       end
       object btnHelp: TButton
         Left = 98
         Height = 57
+        Hint = 'Shows help dialogue'
         Top = 8
         Width = 75
         Caption = 'Help'
+        OnClick = btnHelpClick
         ParentFont = False
+        ParentShowHint = False
+        ShowHint = True
         TabOrder = 1
       end
     end
   end
   object GroupBox2: TGroupBox
-    Left = 237
+    Left = 240
     Height = 380
-    Top = 20
-    Width = 417
+    Top = 24
+    Width = 579
     ClientHeight = 378
-    ClientWidth = 415
+    ClientWidth = 577
     Enabled = False
     ParentFont = False
     TabOrder = 1
@@ -108,7 +126,7 @@ object Form3: TForm3
       Left = 8
       Height = 319
       Top = 49
-      Width = 400
+      Width = 552
       Color = clWindow
       Columns = <>
       DataSource = DataBase.DataSource1
@@ -120,33 +138,27 @@ object Form3: TForm3
       Left = 49
       Height = 15
       Top = 18
-      Width = 35
-      Caption = 'Filter:'
+      Width = 83
+      Caption = 'Current Table'
       ParentColor = False
       ParentFont = False
     end
     object edtFilter: TEdit
-      Left = 88
+      Left = 136
       Height = 36
       Top = 8
       Width = 196
       ParentFont = False
+      ParentShowHint = False
+      ReadOnly = True
+      ShowHint = True
       TabOrder = 1
       Text = 'Filter data'
-    end
-    object btnSearch: TButton
-      Left = 302
-      Height = 26
-      Top = 14
-      Width = 98
-      Caption = 'Search'
-      OnClick = btnSearchClick
-      ParentFont = False
-      TabOrder = 2
     end
     object btnSwitch: TButton
       Left = 6
       Height = 25
+      Hint = 'Switches Tables'
       Top = 13
       Width = 35
       Caption = 'Switch'
@@ -154,77 +166,21 @@ object Form3: TForm3
       Font.Name = 'Sans'
       OnClick = btnSwitchClick
       ParentFont = False
-      TabOrder = 3
-    end
-  end
-  object GroupBox3: TGroupBox
-    Left = 662
-    Height = 245
-    Top = 16
-    Width = 163
-    ClientHeight = 243
-    ClientWidth = 161
-    Enabled = False
-    ParentFont = False
-    TabOrder = 2
-    object Memo1: TMemo
-      Left = 8
-      Height = 229
-      Top = 8
-      Width = 146
-      Lines.Strings = (
-        'List of current transactions:'
-      )
-      ParentFont = False
-      ScrollBars = ssAutoVertical
-      TabOrder = 0
-    end
-  end
-  object GroupBox4: TGroupBox
-    Left = 662
-    Height = 139
-    Top = 270
-    Width = 163
-    ClientHeight = 137
-    ClientWidth = 161
-    Enabled = False
-    ParentFont = False
-    TabOrder = 3
-    object btnEdit: TButton
-      Left = 8
-      Height = 25
-      Top = 16
-      Width = 146
-      Caption = 'Remove Change'
-      ParentFont = False
-      TabOrder = 0
-    end
-    object btnReset: TButton
-      Left = 65
-      Height = 25
-      Top = 49
-      Width = 83
-      Caption = 'Reset'
-      ParentFont = False
-      TabOrder = 1
-    end
-    object btnComit: TButton
-      Left = 8
-      Height = 49
-      Top = 82
-      Width = 146
-      Caption = 'Comit Changes'
-      ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 2
     end
     object btnExit: TButton
-      Left = 16
+      Left = 456
       Height = 25
-      Top = 49
-      Width = 42
+      Hint = 'Exits form'
+      Top = 13
+      Width = 75
       Caption = 'Exit'
+      Enabled = False
       OnClick = btnExitClick
-      ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 3
     end
   end
@@ -236,7 +192,7 @@ object Form3: TForm3
     ClientHeight = 204
     ClientWidth = 490
     ParentFont = False
-    TabOrder = 4
+    TabOrder = 2
     object btnStartExit: TButton
       Left = 409
       Height = 25
@@ -273,7 +229,7 @@ object Form3: TForm3
       TabOrder = 2
     end
     object memInfo3: TMemo
-      Left = 319
+      Left = 320
       Height = 139
       Top = 8
       Width = 150

@@ -1,4 +1,5 @@
 program project1;
+// Dpr lpr file
 
 {$mode objfpc}{$H+}
 

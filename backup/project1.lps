@@ -3,12 +3,13 @@
   <ProjectSession>
     <Version Value="11"/>
     <BuildModes Active="Default"/>
-    <Units Count="15">
+    <Units Count="18">
       <Unit0>
         <Filename Value="project1.lpr"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="1"/>
-        <CursorPos Y="17"/>
+        <TopLine Value="2"/>
+        <CursorPos X="5" Y="34"/>
         <UsageCount Value="207"/>
         <Loaded Value="True"/>
       </Unit0>
@@ -20,8 +21,7 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="Main"/>
         <EditorIndex Value="4"/>
-        <TopLine Value="271"/>
-        <CursorPos X="5" Y="301"/>
+        <CursorPos X="18" Y="2"/>
         <UsageCount Value="207"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -33,8 +33,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="Purcase_form"/>
-        <TopLine Value="33"/>
-        <CursorPos X="15" Y="61"/>
+        <CursorPos X="18" Y="2"/>
         <UsageCount Value="204"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -47,8 +46,8 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="Admin_interface"/>
         <EditorIndex Value="8"/>
-        <TopLine Value="122"/>
-        <CursorPos X="22" Y="145"/>
+        <TopLine Value="111"/>
+        <CursorPos X="62" Y="184"/>
         <UsageCount Value="203"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -61,8 +60,7 @@
         <ResourceBaseClass Value="DataModule"/>
         <UnitName Value="Data_Connection"/>
         <EditorIndex Value="6"/>
-        <TopLine Value="50"/>
-        <CursorPos X="19" Y="62"/>
+        <CursorPos X="18" Y="2"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -75,8 +73,7 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="Admin_edit"/>
         <EditorIndex Value="7"/>
-        <TopLine Value="43"/>
-        <CursorPos X="141" Y="55"/>
+        <CursorPos X="18" Y="2"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -88,8 +85,8 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="Admin_edit_add_stop"/>
-        <EditorIndex Value="10"/>
-        <CursorPos X="34" Y="28"/>
+        <EditorIndex Value="9"/>
+        <CursorPos X="19" Y="2"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -98,9 +95,10 @@
         <Filename Value="custom_classes.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="Custom_Classes"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="5"/>
-        <TopLine Value="1042"/>
-        <CursorPos Y="1058"/>
+        <TopLine Value="1161"/>
+        <CursorPos X="3" Y="1162"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>
       </Unit7>
@@ -108,11 +106,10 @@
         <Filename Value="engine.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="Engine"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="3"/>
-        <TopLine Value="807"/>
-        <CursorPos X="35" Y="830"/>
-        <UsageCount Value="192"/>
+        <TopLine Value="566"/>
+        <CursorPos X="38" Y="576"/>
+        <UsageCount Value="219"/>
         <Loaded Value="True"/>
       </Unit8>
       <Unit9>
@@ -120,8 +117,8 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="EngineInterface"/>
         <EditorIndex Value="2"/>
-        <CursorPos X="5" Y="15"/>
-        <UsageCount Value="129"/>
+        <CursorPos X="18" Y="2"/>
+        <UsageCount Value="205"/>
         <Loaded Value="True"/>
       </Unit9>
       <Unit10>
@@ -129,159 +126,180 @@
         <UnitName Value="TestingUnit"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="31" Y="8"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="1"/>
       </Unit10>
       <Unit11>
-        <Filename Value="/usr/lib/lazarus/lcl/include/application.inc"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="2223"/>
-        <CursorPos X="11" Y="2224"/>
-        <UsageCount Value="1"/>
-      </Unit11>
-      <Unit12>
         <Filename Value="/usr/lib/lazarus/lcl/include/customform.inc"/>
-        <EditorIndex Value="9"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="3023"/>
         <CursorPos Y="3038"/>
-        <UsageCount Value="11"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="9"/>
+      </Unit11>
+      <Unit12>
+        <Filename Value="/usr/lib/lazarus/lcl/include/control.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="2897"/>
+        <CursorPos Y="2913"/>
+        <UsageCount Value="9"/>
       </Unit12>
       <Unit13>
-        <Filename Value="/usr/lib/lazarus/lcl/include/inputdialog.inc"/>
+        <Filename Value="/usr/lib/lazarus/lcl/include/customlistbox.inc"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="153"/>
-        <CursorPos Y="174"/>
-        <UsageCount Value="13"/>
+        <TopLine Value="577"/>
+        <CursorPos Y="603"/>
+        <UsageCount Value="7"/>
       </Unit13>
       <Unit14>
-        <Filename Value="/usr/lib/lazarus/components/lazutils/laztracer.pas"/>
-        <UnitName Value="LazTracer"/>
+        <Filename Value="/usr/lib/lazarus/lcl/include/wincontrol.inc"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="33"/>
-        <CursorPos Y="50"/>
-        <UsageCount Value="2"/>
+        <TopLine Value="7418"/>
+        <CursorPos Y="7436"/>
+        <UsageCount Value="6"/>
       </Unit14>
+      <Unit15>
+        <Filename Value="/usr/lib/lazarus/lcl/dialogs.pp"/>
+        <UnitName Value="Dialogs"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="752"/>
+        <CursorPos X="10" Y="768"/>
+        <UsageCount Value="6"/>
+      </Unit15>
+      <Unit16>
+        <Filename Value="/usr/lib/lazarus/lcl/include/inputdialog.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="127"/>
+        <CursorPos X="10" Y="103"/>
+        <UsageCount Value="5"/>
+      </Unit16>
+      <Unit17>
+        <Filename Value="/usr/lib/lazarus/lcl/groupededit.pp"/>
+        <UnitName Value="GroupedEdit"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="943"/>
+        <CursorPos Y="960"/>
+        <UsageCount Value="6"/>
+      </Unit17>
     </Units>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
-        <Filename Value="engine.pas"/>
-        <Caret Line="1140" TopLine="1116"/>
+        <Filename Value="admin_edit.pas"/>
+        <Caret Line="350" Column="119" TopLine="344"/>
       </Position1>
       <Position2>
-        <Filename Value="engine.pas"/>
-        <Caret Line="1142" TopLine="1116"/>
+        <Filename Value="admin_edit.pas"/>
+        <Caret Line="198" Column="28" TopLine="180"/>
       </Position2>
       <Position3>
         <Filename Value="engine.pas"/>
-        <Caret Line="1143" TopLine="1116"/>
+        <Caret Line="91" Column="15" TopLine="76"/>
       </Position3>
       <Position4>
-        <Filename Value="engine.pas"/>
-        <Caret Line="1140" TopLine="1116"/>
+        <Filename Value="admin_edit.pas"/>
+        <Caret Line="244" Column="34" TopLine="228"/>
       </Position4>
       <Position5>
         <Filename Value="engine.pas"/>
-        <Caret Line="1142" TopLine="1116"/>
+        <Caret Line="93" Column="15" TopLine="79"/>
       </Position5>
       <Position6>
-        <Filename Value="engine.pas"/>
-        <Caret Line="1143" TopLine="1116"/>
+        <Filename Value="admin_edit.pas"/>
+        <Caret Line="198" Column="31" TopLine="186"/>
       </Position6>
       <Position7>
         <Filename Value="engine.pas"/>
-        <Caret Line="1140" TopLine="1116"/>
+        <Caret Line="91" Column="15" TopLine="77"/>
       </Position7>
       <Position8>
-        <Filename Value="engine.pas"/>
-        <Caret Line="1142" TopLine="1116"/>
+        <Filename Value="admin_interface.pas"/>
+        <Caret Line="76" Column="30" TopLine="69"/>
       </Position8>
       <Position9>
-        <Filename Value="engine.pas"/>
-        <Caret Line="1143" TopLine="1116"/>
+        <Filename Value="admin_edit.pas"/>
+        <Caret Line="198" Column="31" TopLine="186"/>
       </Position9>
       <Position10>
-        <Filename Value="engine.pas"/>
-        <Caret Line="1140" TopLine="1116"/>
+        <Filename Value="admin_edit.pas"/>
+        <Caret Line="160" Column="6" TopLine="32"/>
       </Position10>
       <Position11>
-        <Filename Value="engine.pas"/>
-        <Caret Line="1142" TopLine="1116"/>
+        <Filename Value="admin_edit.pas"/>
+        <Caret Line="121" Column="81" TopLine="106"/>
       </Position11>
       <Position12>
-        <Filename Value="engine.pas"/>
-        <Caret Line="1143" TopLine="1116"/>
+        <Filename Value="admin_interface.pas"/>
+        <Caret Line="126" Column="53" TopLine="119"/>
       </Position12>
       <Position13>
-        <Filename Value="engine.pas"/>
-        <Caret Line="1140" TopLine="1116"/>
+        <Filename Value="admin_interface.pas"/>
+        <Caret Line="109" Column="29" TopLine="81"/>
       </Position13>
       <Position14>
-        <Filename Value="engine.pas"/>
-        <Caret Line="1142" TopLine="1116"/>
+        <Filename Value="admin_interface.pas"/>
+        <Caret Line="160" Column="49" TopLine="142"/>
       </Position14>
       <Position15>
-        <Filename Value="engine.pas"/>
-        <Caret Line="1143" TopLine="1116"/>
+        <Filename Value="admin_edit.pas"/>
+        <Caret Line="260" TopLine="172"/>
       </Position15>
       <Position16>
-        <Filename Value="engine.pas"/>
-        <Caret Line="1140" TopLine="1116"/>
+        <Filename Value="admin_interface.pas"/>
+        <Caret Line="317" Column="32" TopLine="285"/>
       </Position16>
       <Position17>
         <Filename Value="engine.pas"/>
-        <Caret Line="1145" Column="21" TopLine="1116"/>
+        <Caret Line="56" Column="31" TopLine="40"/>
       </Position17>
       <Position18>
-        <Filename Value="main.pas"/>
-        <Caret Line="57" Column="16" TopLine="79"/>
+        <Filename Value="engine.pas"/>
+        <Caret Line="704" Column="3" TopLine="700"/>
       </Position18>
       <Position19>
-        <Filename Value="engineinterface.pas"/>
-        <Caret Line="10" Column="13"/>
+        <Filename Value="engine.pas"/>
+        <Caret Line="56" Column="61" TopLine="42"/>
       </Position19>
       <Position20>
-        <Filename Value="main.pas"/>
-        <Caret Line="81" Column="54" TopLine="64"/>
+        <Filename Value="custom_classes.pas"/>
+        <Caret Line="241" Column="20" TopLine="218"/>
       </Position20>
       <Position21>
-        <Filename Value="main.pas"/>
-        <Caret Line="106" Column="24" TopLine="83"/>
+        <Filename Value="engine.pas"/>
+        <Caret Line="94" Column="71" TopLine="69"/>
       </Position21>
       <Position22>
-        <Filename Value="main.pas"/>
-        <Caret Line="114" Column="54" TopLine="98"/>
+        <Filename Value="admin_interface.pas"/>
+        <Caret Line="312" Column="16" TopLine="176"/>
       </Position22>
       <Position23>
-        <Filename Value="main.pas"/>
-        <Caret Line="158" Column="22" TopLine="131"/>
+        <Filename Value="admin_interface.pas"/>
+        <Caret Line="171" Column="54" TopLine="169"/>
       </Position23>
       <Position24>
-        <Filename Value="main.pas"/>
-        <Caret Line="170" Column="15" TopLine="149"/>
+        <Filename Value="admin_interface.pas"/>
+        <Caret Line="138" Column="61" TopLine="122"/>
       </Position24>
       <Position25>
-        <Filename Value="main.pas"/>
-        <Caret Line="184" Column="22" TopLine="168"/>
+        <Filename Value="admin_interface.pas"/>
+        <Caret Line="139" Column="39" TopLine="122"/>
       </Position25>
       <Position26>
-        <Filename Value="main.pas"/>
-        <Caret Line="301" Column="5" TopLine="271"/>
+        <Filename Value="admin_interface.pas"/>
+        <Caret Line="142" Column="76" TopLine="122"/>
       </Position26>
       <Position27>
         <Filename Value="engine.pas"/>
-        <Caret Line="1145" TopLine="1116"/>
+        <Caret Line="576" Column="38" TopLine="566"/>
       </Position27>
       <Position28>
-        <Filename Value="admin_interface.pas"/>
-        <Caret Line="148" TopLine="122"/>
+        <Filename Value="custom_classes.pas"/>
+        <Caret Line="103" Column="14" TopLine="88"/>
       </Position28>
       <Position29>
-        <Filename Value="admin_interface.pas"/>
-        <Caret Line="145" Column="22" TopLine="122"/>
+        <Filename Value="custom_classes.pas"/>
+        <Caret Line="1162" Column="3" TopLine="1150"/>
       </Position29>
       <Position30>
-        <Filename Value="engine.pas"/>
-        <Caret Line="63" Column="15" TopLine="49"/>
+        <Filename Value="custom_classes.pas"/>
+        <Caret Line="103" Column="14" TopLine="86"/>
       </Position30>
     </JumpHistory>
     <RunParams>
@@ -290,53 +308,22 @@
     </RunParams>
   </ProjectSession>
   <Debugging>
-    <BreakPoints Count="2">
+    <Watches Count="5">
       <Item1>
-        <Kind Value="bpkSource"/>
-        <WatchScope Value="wpsLocal"/>
-        <WatchKind Value="wpkWrite"/>
-        <Source Value="admin_interface.pas"/>
-        <Line Value="148"/>
+        <Expression Value="self.arrroutestops[0].Routepos"/>
       </Item1>
       <Item2>
-        <Kind Value="bpkSource"/>
-        <WatchScope Value="wpsLocal"/>
-        <WatchKind Value="wpkWrite"/>
-        <Source Value="engine.pas"/>
-        <Line Value="1145"/>
-      </Item2>
-    </BreakPoints>
-    <Watches Count="10">
-      <Item1>
-        <Expression Value="Data_Connection.DataBase.SQLQuery1.SQL.Text"/>
-      </Item1>
-      <Item2>
-        <Expression Value="self.pAllRoutes[21]"/>
+        <Expression Value="self.arrroutestops[1].routepos"/>
       </Item2>
       <Item3>
-        <Expression Value="self.pAllRoutes[count]"/>
+        <Expression Value="self.arrroutestops[2].routepos"/>
       </Item3>
       <Item4>
-        <Expression Value="self.pAllRoutes[count+1]"/>
+        <Expression Value="self.arrroutestops[3].routepos"/>
       </Item4>
       <Item5>
-        <Expression Value="self.AllRoutes[count]"/>
+        <Expression Value="self.arrroutestops[4].routepos"/>
       </Item5>
-      <Item6>
-        <Expression Value="self.AllRoutes[count+1]"/>
-      </Item6>
-      <Item7>
-        <Expression Value="TEMPPTRARR[20]"/>
-      </Item7>
-      <Item8>
-        <Expression Value="self.pAllRoutes[20]"/>
-      </Item8>
-      <Item9>
-        <Expression Value="MainEngine.AllRoutes"/>
-      </Item9>
-      <Item10>
-        <Expression Value="SQLQuery1.FieldCount"/>
-      </Item10>
     </Watches>
   </Debugging>
 </CONFIG>

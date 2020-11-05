@@ -10,7 +10,6 @@ object Form1: TForm1
   ChildSizing.ShrinkVertical = crsHomogenousChildResize
   ClientHeight = 389
   ClientWidth = 320
-  OnActivate = FormActivate
   LCLVersion = '2.0.10.0'
   object pnlLocationSelect: TPanel
     Left = 20
@@ -24,8 +23,11 @@ object Form1: TForm1
     object cmbStart: TComboBox
       Left = 8
       Height = 36
-      Top = 42
+      Hint = 'Select a Stop'
+      Top = 34
       Width = 118
+      AutoComplete = True
+      AutoCompleteText = [cbactEnabled, cbactEndOfLineComplete, cbactSearchAscending]
       ItemHeight = 0
       Items.Strings = (
         'Select a Stop'
@@ -34,14 +36,19 @@ object Form1: TForm1
       OnEnter = cmbStartEnter
       OnSelect = cmbStartSelect
       ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 0
       Text = 'Eg.'
     end
     object cmbFinnal: TComboBox
       Left = 151
       Height = 36
-      Top = 42
+      Hint = 'Select a stop'
+      Top = 34
       Width = 118
+      AutoComplete = True
+      AutoCompleteText = [cbactEnabled, cbactEndOfLineComplete, cbactSearchAscending]
       ItemHeight = 0
       Items.Strings = (
         'Select a Stop'
@@ -50,13 +57,15 @@ object Form1: TForm1
       OnEnter = cmbFinnalEnter
       OnSelect = cmbFinnalSelect
       ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 1
       Text = 'Eg.'
     end
     object lblStart: TLabel
       Left = 24
       Height = 15
-      Top = 16
+      Top = 8
       Width = 88
       Caption = 'Starting values'
       ParentColor = False
@@ -64,7 +73,7 @@ object Form1: TForm1
     object lblEnd: TLabel
       Left = 168
       Height = 15
-      Top = 16
+      Top = 8
       Width = 66
       Caption = 'End Values'
       ParentColor = False
@@ -79,60 +88,84 @@ object Form1: TForm1
     ClientWidth = 278
     ParentFont = False
     TabOrder = 1
-    object edtStartTime: TEdit
-      Left = 8
+    object tedtStart: TTimeEdit
+      Left = 16
       Height = 36
+      Hint = 'Enter a time in 24 hour format'
       Top = 8
-      Width = 120
-      OnEditingDone = edtStartTimeEditingDone
+      Width = 103
+      ButtonWidth = 0
+      NumGlyphs = 1
+      MaxLength = 0
+      OnChange = tedtStartChange
+      OnEditingDone = tedtStartEditingDone
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 0
       Text = '00:00'
     end
-    object edtEndTime: TEdit
-      Left = 144
+    object tedtEnd: TTimeEdit
+      Left = 151
       Height = 36
+      Hint = 'Enter a Time in 24 hour format'
       Top = 8
-      Width = 125
-      OnEditingDone = edtEndTimeEditingDone
+      Width = 103
+      ButtonWidth = 0
+      NumGlyphs = 1
+      MaxLength = 0
+      OnChange = tedtEndChange
+      OnEditingDone = tedtEndEditingDone
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 1
-      Text = '23:59'
+      Text = '00:00'
     end
   end
   object btnExit_Select: TButton
     Left = 25
     Height = 50
+    Hint = 'Closes Application'
     Top = 327
     Width = 107
     Caption = 'Exit'
+    OnClick = btnExit_SelectClick
     ParentFont = False
+    ParentShowHint = False
+    ShowHint = True
     TabOrder = 2
   end
   object btnNext_Select: TButton
     Left = 188
     Height = 50
+    Hint = 'Continue to purchace screen'
     Top = 327
     Width = 107
     Caption = 'Next'
     OnClick = btnNext_SelectClick
     ParentFont = False
+    ParentShowHint = False
+    ShowHint = True
     TabOrder = 3
   end
   object btnReset_Select: TButton
     Left = 140
     Height = 33
+    Hint = 'Resets to default '
     Top = 335
     Width = 42
     Caption = 'Reset'
     OnClick = btnReset_SelectClick
     ParentFont = False
+    ParentShowHint = False
+    ShowHint = True
     TabOrder = 4
   end
   object gbxWelcome: TGroupBox
     Left = 20
-    Height = 154
+    Height = 158
     Top = 10
     Width = 278
-    ClientHeight = 152
+    ClientHeight = 156
     ClientWidth = 276
     ParentFont = False
     TabOrder = 5
@@ -158,43 +191,49 @@ object Form1: TForm1
       Lines.Strings = (
         'Welcome to Easy Travel'
         ''
-        'If you are stuck please use the "Hint" and "Help" button''s located on each stage of the program.'
+        'Please enter the times and places at which you which to arive and we shall calculate a route there for you.'
         'We hope your experience is a memorable one.'
         ''
         'The Developer'
       )
       ParentFont = False
+      ReadOnly = True
       ScrollBars = ssAutoVertical
       TabOrder = 1
     end
-    object btnHelp: TButton
+    object btnShowMap: TButton
       Left = 157
       Height = 26
-      Top = 48
+      Hint = 'Shows Map'
+      Top = 80
       Width = 104
-      Caption = 'Help'
-      OnClick = btnHelpClick
+      Caption = 'Show Map'
+      OnClick = btnShowMapClick
       ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 2
-    end
-    object btnShowHints: TButton
-      Left = 157
-      Height = 26
-      Top = 82
-      Width = 104
-      Caption = 'Show Hints'
-      OnClick = btnShowHintsClick
-      ParentFont = False
-      TabOrder = 3
     end
     object btnOther: TButton
       Left = 157
       Height = 25
+      Hint = 'Shows Admin Screen'
       Top = 114
       Width = 104
       Caption = 'Click for admin'
       OnClick = btnOtherClick
       ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 3
+    end
+    object btnhelp: TButton
+      Left = 157
+      Height = 25
+      Top = 46
+      Width = 104
+      Caption = 'Help'
+      OnClick = btnHelpClick
       TabOrder = 4
     end
   end

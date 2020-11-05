@@ -19,9 +19,13 @@ object Form4: TForm4
     object edtRoute: TEdit
       Left = 49
       Height = 36
+      Hint = 'Change Route Name'
       Top = 8
       Width = 136
+      OnEditingDone = edtRouteEditingDone
       ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 0
       Text = 'Route Name'
     end
@@ -46,37 +50,29 @@ object Form4: TForm4
       object btnHints: TButton
         Left = 16
         Height = 27
+        Hint = 'Show Map'
         Top = 8
         Width = 84
-        Caption = 'Show Hints'
+        Caption = 'Show Map'
+        OnClick = btnHintsClick
         ParentFont = False
+        ParentShowHint = False
+        ShowHint = True
         TabOrder = 0
       end
       object btnHelp: TButton
         Left = 16
         Height = 26
+        Hint = 'Show Hints'
         Top = 50
         Width = 84
         Caption = 'Help'
+        OnClick = btnHelpClick
         ParentFont = False
+        ParentShowHint = False
+        ShowHint = True
         TabOrder = 1
       end
-    end
-    object edtStartTime: TEdit
-      Left = 8
-      Height = 36
-      Top = 64
-      Width = 80
-      TabOrder = 2
-      Text = 'edtStartTime'
-    end
-    object edtEndTime: TEdit
-      Left = 105
-      Height = 36
-      Top = 64
-      Width = 80
-      TabOrder = 3
-      Text = 'edtEndTime'
     end
     object Label2: TLabel
       Left = 16
@@ -94,6 +90,36 @@ object Form4: TForm4
       Caption = 'End Time:'
       ParentColor = False
     end
+    object tedtStart: TTimeEdit
+      Left = 8
+      Height = 36
+      Hint = 'Change Start Time of Route'
+      Top = 64
+      Width = 88
+      ButtonWidth = 0
+      NumGlyphs = 1
+      MaxLength = 0
+      OnEditingDone = tedtStartEditingDone
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 2
+      Text = 'tedtStart'
+    end
+    object tedtEnd: TTimeEdit
+      Left = 104
+      Height = 36
+      Hint = 'Change Start Time of Route'
+      Top = 64
+      Width = 88
+      ButtonWidth = 0
+      NumGlyphs = 1
+      MaxLength = 0
+      OnEditingDone = tedtEndEditingDone
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 3
+      Text = 'tedtEnd'
+    end
   end
   object gbxStops: TGroupBox
     Left = 14
@@ -107,9 +133,10 @@ object Form4: TForm4
     object ListBox2: TListBox
       Left = 3
       Height = 251
+      Hint = 'Select a Stop in route for actions'
       Top = 8
-      Width = 128
-      Font.Height = -12
+      Width = 144
+      Font.Height = -11
       Font.Name = 'Sans'
       Items.Strings = (
         'Stops'
@@ -117,69 +144,79 @@ object Form4: TForm4
         'Selected'
         'Route'
       )
-      ItemHeight = 22
+      ItemHeight = 21
       ItemIndex = 0
+      OnClick = ListBox2Click
       ParentFont = False
-      ScrollWidth = 126
+      ScrollWidth = 142
       TabOrder = 0
     end
     object btnRemove: TButton
-      Left = 139
+      Left = 152
       Height = 25
-      Top = 24
-      Width = 75
+      Hint = 'Removes Selected Stop'
+      Top = 16
+      Width = 62
       Caption = 'Remove'
+      OnClick = btnRemoveClick
       ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 1
     end
     object btnInsert: TButton
-      Left = 139
+      Left = 152
       Height = 25
-      Top = 64
-      Width = 75
+      Hint = 'Inserts new Stop above selected stop'
+      Top = 48
+      Width = 62
       Caption = 'Insert'
+      OnClick = btnInsertClick
       ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 2
     end
     object btnAppend: TButton
-      Left = 139
+      Left = 152
       Height = 25
-      Top = 104
-      Width = 75
+      Hint = 'Appends New Stop after seleccted stop'
+      Top = 80
+      Width = 62
       Caption = 'Append'
+      OnClick = btnAppendClick
       ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 3
     end
     object btnModify: TButton
-      Left = 139
+      Left = 152
       Height = 25
-      Top = 139
-      Width = 75
+      Hint = 'Modify time interval of selected stop'
+      Top = 112
+      Width = 62
       Caption = 'Modify'
+      OnClick = btnModifyClick
       ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 4
     end
-    object btnGenLin: TButton
-      Left = 139
+    object btnSetPrice: TButton
+      Left = 151
       Height = 25
-      Top = 176
-      Width = 75
-      Caption = 'Make Linear'
-      Font.Height = -12
+      Hint = 'Change Price of Route'
+      Top = 208
+      Width = 65
+      Caption = 'Change Price'
+      Font.Height = -11
       Font.Name = 'Sans'
+      OnClick = btnSetPriceClick
       ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 5
-    end
-    object btnGenRotation: TButton
-      Left = 139
-      Height = 25
-      Top = 216
-      Width = 75
-      Caption = 'Make Rotation'
-      Font.Height = -10
-      Font.Name = 'Sans'
-      ParentFont = False
-      TabOrder = 6
     end
   end
   object gbxChanges: TGroupBox
@@ -200,6 +237,7 @@ object Form4: TForm4
         'Current Trasactions:'
       )
       ParentFont = False
+      ReadOnly = True
       TabOrder = 0
     end
   end
@@ -212,24 +250,18 @@ object Form4: TForm4
     ClientWidth = 91
     ParentFont = False
     TabOrder = 3
-    object btnExit: TButton
-      Left = 8
-      Height = 25
-      Top = 8
-      Width = 75
-      Caption = 'Cancel'
-      OnClick = btnExitClick
-      ParentFont = False
-      TabOrder = 0
-    end
     object btnConfirm: TButton
       Left = 8
       Height = 33
-      Top = 41
+      Hint = 'Exit Screen'
+      Top = 24
       Width = 75
-      Caption = 'Confirm'
+      Caption = 'Exit'
+      OnClick = btnConfirmClick
       ParentFont = False
-      TabOrder = 1
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 0
     end
   end
 end

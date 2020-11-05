@@ -1,18 +1,26 @@
 unit EngineInterface;
+// Daniel Radloff
 
 {$mode objfpc}{$H+}
 
 interface
+// Compiler does not like creating a engine in the unit in which it is defined
+//          for this reason I have this unit. It contains the Engine
+//          It also avoids some confusion with a few of the functions defined
+//          in the Engine Unit
 
-uses Engine, Sysutils;
+uses Engine, SysUtils;
+
 type
   pAppEngine = ^APEngine;
-function Engine():integer;
-function convTimeToStr(Time:integer):string;
-function convStrToTime(Time:string):integer;
+
+function Engine(): integer;
+function convTimeToStr(Time: integer): string;
 //       Restarts AppEngine in place
 procedure RestartEngine();
-var MainEngine: APEngine;
+
+var
+  MainEngine: APEngine;
 
 implementation
 // Ok so this is really, REALLY weird.
@@ -32,10 +40,11 @@ implementation
 //    create it after the form is Activated.
 //    Yes it is horrific, I should not have to do this, I don't know why I have
 //    to do this, and I don't want to do this but it seems to be the only way
-//    to get the fucking thing to work.
+//    to get the thing to work.
 function Engine(): integer;
 begin
-  if MainEngine = nil then MainEngine := APEngine.Create();
+  if MainEngine = nil then
+    MainEngine := APEngine.Create();
   Result := 1;
 end;
 
@@ -46,15 +55,10 @@ begin
   Minutes := IntToStr(Time mod 60);
   Hours := IntToStr(Time div 60);
   if Length(Hours) < 2 then
-     Hours := '0'+Hours;
+    Hours := '0' + Hours;
   if Length(Minutes) < 2 then
-     Minutes := '0'+Minutes;
+    Minutes := '0' + Minutes;
   Result := Hours + ':' + Minutes;
-end;
-
-function convStrToTime(Time: string): integer;
-begin
-
 end;
 
 procedure RestartEngine();
@@ -65,6 +69,5 @@ end;
 initialization
 
 finalization
- FreeAndNil(MainEngine);
+  FreeAndNil(MainEngine);
 end.
-
