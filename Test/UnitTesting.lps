@@ -3,7 +3,7 @@
   <ProjectSession>
     <Version Value="11"/>
     <BuildModes Active="Default"/>
-    <Units Count="3">
+    <Units Count="4">
       <Unit0>
         <Filename Value="UnitTesting.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -14,23 +14,38 @@
       <Unit1>
         <Filename Value="test.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
-        <CursorPos X="70" Y="21"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="63"/>
+        <CursorPos X="16" Y="73"/>
         <UsageCount Value="45"/>
+        <Loaded Value="True"/>
       </Unit1>
       <Unit2>
         <Filename Value="../custom_classes.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="Custom_Classes"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="125"/>
         <CursorPos X="177" Y="142"/>
         <FoldState Value=" T7i3CV T3l2041 pjEjP035C"/>
         <UsageCount Value="45"/>
       </Unit2>
+      <Unit3>
+        <Filename Value="../testcase1.pas"/>
+        <UnitName Value="TestCase1"/>
+        <TopLine Value="16"/>
+        <CursorPos X="3" Y="25"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit3>
     </Units>
-    <JumpHistory HistoryIndex="-1"/>
+    <JumpHistory Count="1">
+      <Position1>
+        <Filename Value="../testcase1.pas"/>
+        <Caret Line="25" Column="3" TopLine="16"/>
+      </Position1>
+    </JumpHistory>
     <RunParams>
       <FormatVersion Value="2"/>
       <Modes Count="1" ActiveMode="default">
@@ -42,4 +57,15 @@
       </Modes>
     </RunParams>
   </ProjectSession>
+  <Debugging>
+    <BreakPoints Count="1">
+      <Item1>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="../testcase1.pas"/>
+        <Line Value="25"/>
+      </Item1>
+    </BreakPoints>
+  </Debugging>
 </CONFIG>

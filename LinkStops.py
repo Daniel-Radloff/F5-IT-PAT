@@ -21,7 +21,7 @@ for stop in data:
         print(ID + "\n" + Location + "\n" + Name)
         Closel = list()
         while True:
-            iIn = input("Stops nearby: ")
+            iIn = input("Routes Connected: ")
             if len(iIn) < 1:
                 break
             else:
@@ -29,8 +29,8 @@ for stop in data:
         Close_names = " ("
         Close = ""
         for loc in Closel:
-            responce = currEdit.execute("Select BusStopID From BusStopTBL " +
-                                        "where Location = ?", (loc,))
+            responce = currEdit.execute("Select RouteID From RoutesTBL " +
+                                        "where RouteID = ?", (loc,))
             result_raw = responce.fetchall()
             result = result_raw[0]
             if loc == Closel[len(Closel)-1]:

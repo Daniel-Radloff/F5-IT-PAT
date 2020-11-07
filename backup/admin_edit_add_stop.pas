@@ -1,4 +1,7 @@
 unit Admin_edit_add_stop;
+// Daniel RAdloff
+// Might be changed
+//       ---> was changed, This is now a view of the city map
 
 {$mode objfpc}{$H+}
 
@@ -12,18 +15,9 @@ type
   { TForm5 }
 
   TForm5 = class(TForm)
-    btnAdd: TButton;
-    btnRemove: TButton;
-    btnCancel: TButton;
-    btnConfirm: TButton;
-    edtName: TEdit;
-    gbxName: TGroupBox;
-    gbxClose: TGroupBox;
-    GroupBox1: TGroupBox;
-    ListBox1: TListBox;
-    ListBox2: TListBox;
-    memWarn: TMemo;
-    pnlClose: TPanel;
+    btnClose: TButton;
+    Image1: TImage;
+    procedure btnCloseClick(Sender: TObject);
   private
 
   public
@@ -36,6 +30,13 @@ var
 implementation
 
 {$R *.lfm}
+
+{ TForm5 }
+
+procedure TForm5.btnCloseClick(Sender: TObject);
+begin
+  Form5.Close;
+end;
 
 end.
 

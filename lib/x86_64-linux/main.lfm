@@ -1,7 +1,7 @@
 object Form1: TForm1
-  Left = 761
+  Left = 757
   Height = 389
-  Top = 282
+  Top = 278
   Width = 320
   Caption = 'Form1'
   ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
@@ -10,8 +10,7 @@ object Form1: TForm1
   ChildSizing.ShrinkVertical = crsHomogenousChildResize
   ClientHeight = 389
   ClientWidth = 320
-  OnActivate = FormActivate
-  LCLVersion = '2.0.6.0'
+  LCLVersion = '2.0.10.0'
   object pnlLocationSelect: TPanel
     Left = 20
     Height = 78
@@ -23,124 +22,150 @@ object Form1: TForm1
     TabOrder = 0
     object cmbStart: TComboBox
       Left = 8
-      Height = 35
-      Top = 42
+      Height = 36
+      Hint = 'Select a Stop'
+      Top = 34
       Width = 118
+      AutoComplete = True
+      AutoCompleteText = [cbactEnabled, cbactEndOfLineComplete, cbactSearchAscending]
       ItemHeight = 0
-      ItemIndex = 0
       Items.Strings = (
-        'Eg.'
+        'Select a Stop'
       )
+      OnClick = cmbStartClick
+      OnEnter = cmbStartEnter
+      OnSelect = cmbStartSelect
       ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 0
       Text = 'Eg.'
     end
     object cmbFinnal: TComboBox
       Left = 151
-      Height = 35
-      Top = 42
+      Height = 36
+      Hint = 'Select a stop'
+      Top = 34
       Width = 118
+      AutoComplete = True
+      AutoCompleteText = [cbactEnabled, cbactEndOfLineComplete, cbactSearchAscending]
       ItemHeight = 0
-      ItemIndex = 0
       Items.Strings = (
-        'Eg.'
+        'Select a Stop'
       )
-      ParentFont = False
-      TabOrder = 1
-      Text = 'Eg.'
-    end
-    object edtFilterStart: TEdit
-      Left = 15
-      Height = 35
-      Hint = 'Enter a destination or the first few letters and select'#10'a option in the dropdown menu below.'#10'We''ll try guess what you''re looking for.'
-      Top = 8
-      Width = 104
+      OnClick = cmbFinnalClick
+      OnEnter = cmbFinnalEnter
+      OnSelect = cmbFinnalSelect
       ParentFont = False
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 2
-      Text = 'Enter Start'
+      TabOrder = 1
+      Text = 'Eg.'
     end
-    object edtFilterFinal: TEdit
-      Left = 158
-      Height = 35
+    object lblStart: TLabel
+      Left = 24
+      Height = 15
       Top = 8
-      Width = 104
-      ParentFont = False
-      TabOrder = 3
-      Text = 'Enter End'
+      Width = 88
+      Caption = 'Starting values'
+      ParentColor = False
+    end
+    object lblEnd: TLabel
+      Left = 168
+      Height = 15
+      Top = 8
+      Width = 66
+      Caption = 'End Values'
+      ParentColor = False
     end
   end
   object pnlTimeSelect: TPanel
     Left = 20
-    Height = 45
+    Height = 53
     Top = 270
     Width = 278
-    ClientHeight = 45
+    ClientHeight = 53
     ClientWidth = 278
     ParentFont = False
     TabOrder = 1
     object tedtStart: TTimeEdit
       Left = 16
-      Height = 35
-      Hint = 'Click the Clock icon to select a time.'
+      Height = 36
+      Hint = 'Enter a time in 24 hour format'
       Top = 8
-      Width = 106
-      ButtonWidth = 23
+      Width = 103
+      ButtonWidth = 0
       NumGlyphs = 1
-      FocusOnButtonClick = True
       MaxLength = 0
-      ParentFont = False
+      OnChange = tedtStartChange
+      OnEditingDone = tedtStartEditingDone
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 0
-      Text = 'Click Clock'
+      Text = '00:00'
     end
     object tedtEnd: TTimeEdit
-      Left = 155
-      Height = 35
+      Left = 151
+      Height = 36
+      Hint = 'Enter a Time in 24 hour format'
       Top = 8
-      Width = 107
-      ButtonWidth = 23
-      DirectInput = False
+      Width = 103
+      ButtonWidth = 0
       NumGlyphs = 1
       MaxLength = 0
-      ParentFont = False
+      OnChange = tedtEndChange
+      OnEditingDone = tedtEndEditingDone
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 1
-      Text = 'Click Clock'
+      Text = '00:00'
     end
   end
   object btnExit_Select: TButton
     Left = 25
     Height = 50
+    Hint = 'Closes Application'
     Top = 327
     Width = 107
     Caption = 'Exit'
+    OnClick = btnExit_SelectClick
     ParentFont = False
+    ParentShowHint = False
+    ShowHint = True
     TabOrder = 2
   end
   object btnNext_Select: TButton
     Left = 188
     Height = 50
+    Hint = 'Continue to purchace screen'
     Top = 327
     Width = 107
     Caption = 'Next'
+    OnClick = btnNext_SelectClick
     ParentFont = False
+    ParentShowHint = False
+    ShowHint = True
     TabOrder = 3
   end
   object btnReset_Select: TButton
     Left = 140
     Height = 33
+    Hint = 'Resets to default '
     Top = 335
     Width = 42
     Caption = 'Reset'
+    OnClick = btnReset_SelectClick
     ParentFont = False
+    ParentShowHint = False
+    ShowHint = True
     TabOrder = 4
   end
   object gbxWelcome: TGroupBox
     Left = 20
-    Height = 154
+    Height = 158
     Top = 10
     Width = 278
-    ClientHeight = 152
+    ClientHeight = 156
     ClientWidth = 276
     ParentFont = False
     TabOrder = 5
@@ -166,40 +191,49 @@ object Form1: TForm1
       Lines.Strings = (
         'Welcome to Easy Travel'
         ''
-        'If you are stuck please use the "Hint" and "Help" button''s located on each stage of the program.'
+        'Please enter the times and places at which you which to arive and we shall calculate a route there for you.'
         'We hope your experience is a memorable one.'
         ''
         'The Developer'
       )
       ParentFont = False
+      ReadOnly = True
       ScrollBars = ssAutoVertical
       TabOrder = 1
     end
-    object btnHelp: TButton
+    object btnShowMap: TButton
       Left = 157
       Height = 26
-      Top = 48
+      Hint = 'Shows Map'
+      Top = 80
       Width = 104
-      Caption = 'Help'
+      Caption = 'Show Map'
+      OnClick = btnShowMapClick
       ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 2
-    end
-    object btnShowHints: TButton
-      Left = 157
-      Height = 26
-      Top = 82
-      Width = 104
-      Caption = 'Show Hints'
-      ParentFont = False
-      TabOrder = 3
     end
     object btnOther: TButton
       Left = 157
       Height = 25
+      Hint = 'Shows Admin Screen'
       Top = 114
       Width = 104
-      Caption = 'Other'
+      Caption = 'Click for admin'
+      OnClick = btnOtherClick
       ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 3
+    end
+    object btnhelp: TButton
+      Left = 157
+      Height = 25
+      Top = 46
+      Width = 104
+      Caption = 'Help'
+      OnClick = btnHelpClick
       TabOrder = 4
     end
   end
